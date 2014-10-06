@@ -25,9 +25,10 @@ public class ToolContriCalculator implements Callable<Map<String, ContriRes>>, T
     private final double FCRAtMax;
     private final int indexOfFCRAtMax;
     private final boolean pos;
-    private double fcr;
+    private final double fcr;
+    private final boolean les;
     
-    public ToolContriCalculator(String itemSetID, List<String> orderedItems, FCRRes FCRRes, boolean pos, double fcr) {
+    public ToolContriCalculator(String itemSetID, List<String> orderedItems, FCRRes FCRRes, boolean pos, double fcr, boolean les) {
         this.itemSetID = itemSetID;
         this.orderedItems = orderedItems;
         this.FCRs = FCRRes.getFCRs();
@@ -35,6 +36,7 @@ public class ToolContriCalculator implements Callable<Map<String, ContriRes>>, T
         this.indexOfFCRAtMax = FCRRes.getIndexOfFCRAtMax();
         this.pos = pos;
         this.fcr = fcr;
+        this.les = les;
     }
     
     @Override
@@ -49,20 +51,37 @@ public class ToolContriCalculator implements Callable<Map<String, ContriRes>>, T
     @Override
     public Result calc() {
         
-        Double FCRValAtThreshold = FCRAtMax;
+        Double FCRValAtThreshold;
+        if(les) {
+            FCRValAtThreshold = FCRAtMax;
+        }
+        else {
+            if(pos) {
+                FCRValAtThreshold = FCRs.get(FCRs.size()-1);
+            }
+            else {
+                FCRValAtThreshold = FCRs.get(0);
+            }
+        }
+        
         ContriRes resultsOfCalcContributor;
         ContriRes resultsOfCalcContributorFilted;
         
         List<String> contributors = new ArrayList();
-        if(pos) {
-            for(int i = 0; i <= indexOfFCRAtMax; i++) {
-                contributors.add(orderedItems.get(i));
+        if(les) {
+            if(pos) {
+                for(int i = 0; i <= indexOfFCRAtMax; i++) {
+                    contributors.add(orderedItems.get(i));
+                }
+            }
+            else {
+                for(int i = indexOfFCRAtMax; i < FCRs.size(); i++) {
+                    contributors.add(orderedItems.get(i));
+                }
             }
         }
         else {
-            for(int i = indexOfFCRAtMax; i < FCRs.size(); i++) {
-                contributors.add(orderedItems.get(i));
-            }
+            contributors = orderedItems;
         }
         
         resultsOfCalcContributor = new ContriRes( contributors, FCRValAtThreshold );
@@ -84,19 +103,39 @@ public class ToolContriCalculator implements Callable<Map<String, ContriRes>>, T
             int thresholdIndex = -1;
             FCRValAtThreshold = null;
             
-            if(pos) {
-                for(int i = indexOfFCRAtMax; i >= 0; i--) {
-                    if( FCRs.get(i) < fcrS ){
-                        thresholdIndex = i;
-                        break;
+            if(les) {
+                if(pos) {
+                    for(int i = indexOfFCRAtMax; i >= 0; i--) {
+                        if( FCRs.get(i) < fcrS ){
+                            thresholdIndex = i;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    for(int i = indexOfFCRAtMax; i < FCRs.size(); i++) {
+                        if( FCRs.get(i) < fcrS ){
+                            thresholdIndex = i;
+                            break;
+                        }
                     }
                 }
             }
             else {
-                for(int i = indexOfFCRAtMax; i < FCRs.size(); i++) {
-                    if( FCRs.get(i) < fcrS ){
-                        thresholdIndex = i;
-                        break;
+                if(pos) {
+                    for(int i = FCRs.size()-1; i >= 0; i--) {
+                        if( FCRs.get(i) < fcrS ){
+                            thresholdIndex = i;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    for(int i = 0; i < FCRs.size(); i++) {
+                        if( FCRs.get(i) < fcrS ){
+                            thresholdIndex = i;
+                            break;
+                        }
                     }
                 }
             }

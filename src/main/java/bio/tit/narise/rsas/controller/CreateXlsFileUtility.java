@@ -43,7 +43,7 @@ public class CreateXlsFileUtility {
         try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(ofile, true)))) {
             
             pw.println("[ Enriched at the top ]");
-            pw.println("ID\tDescription\tSize\tP-value\tFCR at threshold\tFCR at max\tES\tNES\tRank at max\tContributors\tSize of contributors");
+            pw.println("ID\tDescription\tSize\tP-value\tFCR' at threshold\tFCR' at max\tES\tNES\tRank at max\tContributors\tSize of contributors");
             
             for(RSASRes each: results.getResultsPos()) {
                 if(each.getFcrValAtThreshold() != null) {
@@ -66,7 +66,7 @@ public class CreateXlsFileUtility {
             
             pw.println();
             pw.println("[ Enriched at the bottom ]");
-            pw.println("ID\tDescription\tSize\tP-value\tFCR at threshold\tFCR at max\tES\tNES\tRank at max\tContributors\tSize of contributors");
+            pw.println("ID\tDescription\tSize\tP-value\tFCR' at threshold\tFCR' at max\tES\tNES\tRank at max\tContributors\tSize of contributors");
             
             for(RSASRes each: results.getResultsNeg()) {
                 if(each.getFcrValAtThreshold() != null) {

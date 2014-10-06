@@ -57,7 +57,7 @@ public abstract class FCRFiltModeFactory extends Factory {
             final String itemSetID = orderedItemSet.getItemSetID();
             ToolContriCalculator callableContributorResults = new ToolContriCalculator(
                     itemSetID, orderedItemSet.getOrderedItems(), IDandResultsOfCalcFCR.get(itemSetID), 
-                    IDandResultsOfCalcRunSum.get(itemSetID).isPos(), pargs.getFcr());
+                    IDandResultsOfCalcRunSum.get(itemSetID).isPos(), pargs.getFcr(), pargs.isLes());
             processesCalcContributor.add(callableContributorResults);
         }
         List<Future<Map<String, ContriRes>>> IDandResultsOfCalcContributorFutures = new LinkedList();

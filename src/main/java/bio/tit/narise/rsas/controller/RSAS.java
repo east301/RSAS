@@ -81,6 +81,17 @@ public class RSAS {
                                 .hasArg(true)
                                 .create("c") );
         
+        options.addOption( OptionBuilder.withLongOpt( "max" )
+                                .withArgName("number")
+                                .withDescription( "specify the maximum number of the items in a set" )
+                                .hasArg(true)
+                                .create("ma") );
+        options.addOption( OptionBuilder.withLongOpt( "min" )
+                                .withArgName("number")
+                                .withDescription( "specify the minimum number of the items in a set" )
+                                .hasArg(true)
+                                .create("mi") );
+        
 	options.addOption( "a", "append", false, "append output" );
 	options.addOption( "f", "force", false, "force overwrite" );
         
@@ -97,6 +108,8 @@ public class RSAS {
         
         options.addOption( "gmt", "gmt_format", false, "read set file as gmt file format (default)" );
         options.addOption( "gmx", "gmx_format", false, "read set file as gmx file format" );
+        
+        options.addOption( "les", "leading-edge_subset", false, "apply filtering to leading-edge subsets" );
         
         options.addOption( "wor", "without_report", false, "do not create rep file" );
         
@@ -150,6 +163,15 @@ public class RSAS {
                 pargs.setFcr( Double.parseDouble(line.getOptionValue( "c" )) );
             }
             
+            // for max
+            if( line.hasOption( "ma" ) | line.hasOption( "max" ) ) {
+                pargs.setMax( Integer.parseInt(line.getOptionValue( "ma" )) );
+            }
+            // for min
+            if( line.hasOption( "mi" ) | line.hasOption( "min" ) ) {
+                pargs.setMin( Integer.parseInt(line.getOptionValue( "mi" )) );
+            }
+            
             // for append
             if( line.hasOption( "a" ) | line.hasOption( "append" ) ) {
                 pargs.setAppend(true);
@@ -188,6 +210,11 @@ public class RSAS {
             // for gmx
             if( line.hasOption( "gmx" ) | line.hasOption( "gmx_format" ) ) {
                 pargs.setGmx(true);
+            }
+            
+            // for gmx
+            if( line.hasOption( "les" ) | line.hasOption( "leading-edge_subset" ) ) {
+                pargs.setLes(true);
             }
             
             // for without report

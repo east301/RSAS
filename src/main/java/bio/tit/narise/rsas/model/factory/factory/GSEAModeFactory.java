@@ -48,11 +48,14 @@ public class GSEAModeFactory extends Factory {
     
     // set List<OrderedItemSetRes> orderedItemSets
     public void calcOrderedItemSet() throws IOException {
+        if(pargs.getMax() == -1){
+            pargs.setMax(Storehouse.itemRnk.size()/2);
+        }
         
         for(int i = 0; i < Storehouse.itemSets.size(); i++) {
             ToolOrderedItemSetCalculator orderedItemSetCalculator = new ToolOrderedItemSetCalculator(Storehouse.itemRnk, Storehouse.itemSets.get(i), Storehouse.N);
             final OrderedItemSetRes orderedItemSet = orderedItemSetCalculator.calc();
-            if(orderedItemSet.getNumOfItems() > 0) {
+            if( orderedItemSet.getNumOfItems() >= pargs.getMin() && orderedItemSet.getNumOfItems() <= pargs.getMax()) {
                 Storehouse.orderedItemSets.add( orderedItemSet );
                 Storehouse.setNum++;
             }

@@ -26,6 +26,9 @@ public class ParsedArgs {
     private Double fdr = null;
     private Double fcr = null;
     
+    private Integer max = null;
+    private Integer min = null;
+    
     private boolean append = false;
     private boolean force = false;
     
@@ -39,6 +42,8 @@ public class ParsedArgs {
     
     private boolean gmt = false;
     private boolean gmx = false;
+    
+    private boolean les = false;
     
     private boolean wor = false;
     
@@ -155,6 +160,38 @@ public class ParsedArgs {
      */
     public void setFcr(double fcr) {
         this.fcr = fcr;
+    }
+    
+    /**
+     * 
+     * @return the max
+     */
+    public int getMax() {
+        return max;
+    }
+    
+    /**
+     * 
+     * @param max the max to set
+     */
+    public void setMax(int max) {
+        this.max = max;
+    }
+
+    /**
+     * 
+     * @return the min
+     */
+    public int getMin() {
+        return min;    
+    }
+    
+    /**
+     * 
+     * @param min the min to set
+     */
+    public void setMin(int min) {
+        this.min = min;
     }
     
     /**
@@ -284,6 +321,22 @@ public class ParsedArgs {
     }
     
     /**
+     * 
+     * @return the les
+     */
+    public boolean isLes() {
+        return les;
+    }
+    
+    /**
+     * 
+     * @param les the les to set
+     */
+    public void setLes(boolean les) {
+        this.les = les;
+    }
+    
+    /**
      * @return the wor
      */
     public boolean isWor() {
@@ -317,6 +370,12 @@ public class ParsedArgs {
     }
     
     private void checkIntOptions() {
+        
+        if(max != null && max < 0){ throw new IllegalArgumentException("Illegal maximum size of items in a set"); }
+	if(min != null && min < 0){ throw new IllegalArgumentException("Illegal minimum size of items in a set"); }
+        
+        if(min == null){ min = 0; }
+        if(max == null){ max = -1; }
         
         if(threadNum == -1){ 
             if( Runtime.getRuntime().availableProcessors() == 1 ){ threadNum = 1; }

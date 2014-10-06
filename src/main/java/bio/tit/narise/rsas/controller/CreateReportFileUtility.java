@@ -245,7 +245,7 @@ public class CreateReportFileUtility {
         
         File orepfile = new File(oreppath);
         try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(orepfile, true)))) {
-            pw.println("<FCR><!-- itemSetID, FCRAtMaxES, indexOfFCRAtMaxES, FCRs -->");
+            pw.println("<FCR><!-- itemSetID, FCR'AtMaxES, indexOfFCR'AtMaxES, FCR's -->");
         }
     }
     public static void reportFCRCalcEnd() throws IOException {
@@ -279,12 +279,12 @@ public class CreateReportFileUtility {
         File orepfile = new File(oreppath);
         if(fcr == -1.0) {
             try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(orepfile, true)))) {
-                pw.println("<CONTRIBUTORS_WITHOUT_FCRFILT><!-- itemSetID, FCRThreshold, Contributors -->");
+                pw.println("<CONTRIBUTORS_WITHOUT_FCRFILT><!-- itemSetID, FCR', Contributors -->");
             }
         }
         else {
             try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(orepfile, true)))) {
-                pw.println("<CONTRIBUTORS_WITHOUT_AND_WITH_FCRFILT><!-- itemSetID, FCRThreshold, Contributors -->");
+                pw.println("<CONTRIBUTORS_WITHOUT_AND_WITH_FCRFILT><!-- itemSetID, FCR', Contributors -->");
             }
         }
     }
