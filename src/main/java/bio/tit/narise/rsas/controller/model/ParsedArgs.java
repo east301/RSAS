@@ -21,6 +21,7 @@ public class ParsedArgs {
     private String oreppath = oprefix + ".rep";
     private String rppath = "";
     private String reppath = "";
+    private String xlspath = "";
     
     private Double pVal = null;
     private Double fdr = null;
@@ -36,6 +37,7 @@ public class ParsedArgs {
     
     private boolean gseaMode = false;
     private boolean filtMode = false;
+    private boolean clstMode = false;
     
     private boolean FCRRnkMode = false;
     private boolean FCRRnkpMode = false;
@@ -118,6 +120,19 @@ public class ParsedArgs {
      */
     public void setReppath(String reppath) {
         this.reppath = reppath;
+    }
+    
+    /**
+     * @return the xlspath
+     */
+    public String getXlspath() {
+        return xlspath;
+    }
+    /**
+     * @param xlspath the xlspath to set
+     */
+    public void setXlspath(String xlspath) {
+        this.xlspath = xlspath;
     }
     
     /**
@@ -264,6 +279,20 @@ public class ParsedArgs {
         this.filtMode = filtMode;
     }
 
+    /**
+     * @return the clstMode
+     */
+    public boolean isClstMode() {
+        return clstMode;
+    }
+
+    /**
+     * @param clstMode the clstMode to set
+     */
+    public void setClstMode(boolean clstMode) {
+        this.clstMode = clstMode;
+    }
+    
     /**
      * @return the FCRRnkMode
      */
@@ -459,10 +488,14 @@ public class ParsedArgs {
     
     private void checkModeOptions() {
         
-        if(gseaMode && filtMode) { // gseaMode = true, filtMode = true
-            throw new IllegalArgumentException("Illegal mode selection: both -gsea and -filt options are selected");
+        if(gseaMode && filtMode | gseaMode && clstMode | filtMode && clstMode) { 
+            throw new IllegalArgumentException("Illegal mode selection: more than one mode is selected");
         }
-        else if(!gseaMode && !filtMode) { // gseaMode = false, filtMode = false
+        else if(!gseaMode && !filtMode && !clstMode) { 
+            if(!xlspath.isEmpty()){
+                System.out.println("Use clustering mode");
+                setClstMode(true);
+            }
             if(!reppath.isEmpty()){
                 System.out.println("Use filtering mode");
                 setFiltMode(true);
@@ -473,15 +506,17 @@ public class ParsedArgs {
             }
         }
         
-        if(FCRRnkMode && FCRRnkpMode){ throw new IllegalArgumentException("both -cr and -cp options are selected"); }
-        else if(!FCRRnkMode && !FCRRnkpMode){
-            if(!rpath.isEmpty()){
-                System.out.println("Use rank-based FCR");
-                setFCRRnkMode(true);
-            }
-            else if(!rppath.isEmpty()){
-                System.out.println("Use p-value-based FCR");
-                setFCRRnkpMode(true);
+        if(!clstMode) {
+            if(FCRRnkMode && FCRRnkpMode){ throw new IllegalArgumentException("both -cr and -cp options are selected"); }
+            else if(!FCRRnkMode && !FCRRnkpMode){
+                if(!rpath.isEmpty()){
+                    System.out.println("Use rank-based FCR");
+                    setFCRRnkMode(true);
+                }
+                else if(!rppath.isEmpty()){
+                    System.out.println("Use p-value-based FCR");
+                    setFCRRnkpMode(true);
+                }
             }
         }
     }
@@ -523,6 +558,12 @@ public class ParsedArgs {
             
             if( reppath.isEmpty() ){
                 throw new IllegalArgumentException("-rep option is required");
+            }
+        }
+        else if(clstMode){
+            
+            if( xlspath.isEmpty() ){
+                throw new IllegalArgumentException("-xls option is required");
             }
         }
     }

@@ -38,7 +38,7 @@ public class RSAS {
         // create the Options
         Options options = new Options();
         options.addOption( "h", "help", false, "print this message" );
-
+        
         options.addOption( OptionBuilder.withLongOpt( "rnk" )
                                 .withArgName("file")
                                 .withDescription( "specify the path of the rnk file (rnk file format)" )
@@ -59,11 +59,16 @@ public class RSAS {
                                 .withDescription( "name output files (file extensions are added automatically)" )
                                 .hasArg(true)
                                 .create("o") );
-        options.addOption( OptionBuilder.withLongOpt( "report" )
+        options.addOption( OptionBuilder.withLongOpt( "rep" )
                                 .withArgName("file")
                                 .withDescription( "specify the path of the rep file (rep file format)" )
                                 .hasArg(true)
                                 .create("rep") );
+        options.addOption( OptionBuilder.withLongOpt( "xls" )
+                                .withArgName("file")
+                                .withDescription( "specify the path of the xls file (xls file format)" )
+                                .hasArg(true)
+                                .create("xls") );
         
         options.addOption( OptionBuilder.withLongOpt( "p-value" )
                                 .withArgName("percentage")
@@ -103,6 +108,8 @@ public class RSAS {
         
         options.addOption( "gsea", "gsea_mode", false, "use gsea mode (rnk or rnkp and set files are required)" );
         options.addOption( "filt", "filt_mode", false, "use filtering mode (rep file is required)" );
+        options.addOption( "clst", "clst_mode", false, "use clustering mode (xls file is required)" );
+        
         options.addOption( "cr", "rank-based_FCR", false, "use rank-based FCR" );
         options.addOption( "cp", "p-value-based_FCR", false, "use p-value-based FCR" );
         
@@ -145,9 +152,13 @@ public class RSAS {
             if( line.hasOption( "o" ) | line.hasOption( "out" ) ) {
                 pargs.setOprefix( line.getOptionValue( "o" ) );
             }
-            // for report file
-            if( line.hasOption( "rep" ) | line.hasOption( "report" )  ) {
+            // for rep file
+            if( line.hasOption( "rep" ) | line.hasOption( "rep" )  ) {
                 pargs.setReppath( line.getOptionValue( "rep" ) );
+            }
+            // for xls file
+            if( line.hasOption( "xls" ) | line.hasOption( "xls" )  ) {
+                pargs.setXlspath( line.getOptionValue( "xls" ) );
             }
             
             // for p-value
@@ -191,9 +202,14 @@ public class RSAS {
                 pargs.setGseaMode(true);
             }
             // for filtering mode
-            if( line.hasOption( "filt" ) | line.hasOption( "filtering_mode" ) ) {
+            if( line.hasOption( "filt" ) | line.hasOption( "filt_mode" ) ) {
                 pargs.setFiltMode(true);
             }
+            // for clustering mode
+            if( line.hasOption( "clst" ) | line.hasOption( "clst_mode" ) ) {
+                pargs.setClstMode(true);
+            }
+            
             // for rank-based FCR
             if( line.hasOption( "cr" ) | line.hasOption( "rank-based_FCR" ) ) {
                 pargs.setFCRRnkMode(true);
@@ -212,7 +228,7 @@ public class RSAS {
                 pargs.setGmx(true);
             }
             
-            // for gmx
+            // for les
             if( line.hasOption( "les" ) | line.hasOption( "leading-edge_subset" ) ) {
                 pargs.setLes(true);
             }
@@ -231,18 +247,20 @@ public class RSAS {
             
             pargs.checkArgs();
             
-            CreateXlsFileUtility.createSaveFile(pargs);
-            
-            // Report
-            CreateReportFileUtility.createReportFile(pargs);
+            if(!pargs.isClstMode()) {
+                CreateXlsFileUtility.createSaveFile(pargs);
+                CreateReportFileUtility.createReportFile(pargs);
+            }
             
             Mode currentMode = Mode.getInstance(pargs);
             RSASResults rsasResults = currentMode.handle();
             
-            CreateXlsFileUtility.saveResults(rsasResults, pargs);
-            CreateReportFileUtility.closeReportFile();
+            if(!pargs.isClstMode()) {
+                CreateXlsFileUtility.saveResults(rsasResults, pargs);
+                CreateReportFileUtility.closeReportFile();
+            }
             
-            // calculation of stop time
+            // calculation time
             System.out.println("[ Info ] Completed!");
             long stop = System.currentTimeMillis();
             System.out.println( (stop - start)/1000 + " sec" );

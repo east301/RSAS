@@ -37,7 +37,9 @@ public abstract class Mode {
                 currentMode = FiltRnkpMode.getInstance(pargs);
             }
         }
-        
+        else {
+            currentMode = ClstMode.getInstance(pargs);
+        }
         return currentMode;
     }
     
