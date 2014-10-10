@@ -29,6 +29,7 @@ public class ParsedArgs {
     
     private Integer max = null;
     private Integer min = null;
+    private Integer mcn = null;
     
     private boolean append = false;
     private boolean force = false;
@@ -46,6 +47,9 @@ public class ParsedArgs {
     private boolean gmx = false;
     
     private boolean les = false;
+    
+    private boolean jc = false;
+    private boolean oc = false;
     
     private boolean wor = false;
     
@@ -210,6 +214,22 @@ public class ParsedArgs {
     }
     
     /**
+     * 
+     * @return the mcn
+     */
+    public int getMinConNum() {
+        return mcn;
+    }
+    
+    /**
+     * 
+     * @param mcn the mcn to set
+     */
+    public void setMinConNum(int mcn) {
+        this.mcn = mcn;
+    }
+    
+    /**
      * @return the append
      */
     public boolean isAppend() {
@@ -366,6 +386,38 @@ public class ParsedArgs {
     }
     
     /**
+     * 
+     * @return the jc
+     */
+    public boolean isJc() {
+        return jc;
+    }
+    
+    /**
+     * 
+     * @param jc the jc to set
+     */
+    public void setJc(boolean jc) {
+        this.jc = jc;
+    }
+    
+    /**
+     * 
+     * @return the oc
+     */
+    public boolean isOc() {
+        return oc;
+    }
+    
+    /**
+     * 
+     * @param oc the oc to set
+     */
+    public void setOc(boolean oc) {
+        this.oc = oc;
+    }
+    
+    /**
      * @return the wor
      */
     public boolean isWor() {
@@ -402,9 +454,11 @@ public class ParsedArgs {
         
         if(max != null && max < 0){ throw new IllegalArgumentException("Illegal maximum size of items in a set"); }
 	if(min != null && min < 0){ throw new IllegalArgumentException("Illegal minimum size of items in a set"); }
+        if(mcn != null && mcn < 0){ throw new IllegalArgumentException("Illegal minimum contributors number"); }
         
         if(min == null){ min = 0; }
         if(max == null){ max = -1; }
+        if(mcn == null){ mcn = 1; }
         
         if(threadNum == -1){ 
             if( Runtime.getRuntime().availableProcessors() == 1 ){ threadNum = 1; }
@@ -517,6 +571,12 @@ public class ParsedArgs {
                     System.out.println("Use p-value-based FCR");
                     setFCRRnkpMode(true);
                 }
+            }
+        }
+        else {
+            if(jc && oc) { throw new IllegalArgumentException("both -jc and -oc options are selected"); }
+            else if (!jc && !oc) {
+                setJc(true); // default is jaccard coefficient
             }
         }
     }

@@ -97,6 +97,12 @@ public class RSAS {
                                 .hasArg(true)
                                 .create("mi") );
         
+        options.addOption( OptionBuilder.withLongOpt( "minConNum" )
+                                .withArgName("number")
+                                .withDescription( "item sets with less than the specified number of contributors are removed from the clustering" )
+                                .hasArg(true)
+                                .create("mcn") );
+        
 	options.addOption( "a", "append", false, "append output" );
 	options.addOption( "f", "force", false, "force overwrite" );
         
@@ -117,6 +123,9 @@ public class RSAS {
         options.addOption( "gmx", "gmx_format", false, "read set file as gmx file format" );
         
         options.addOption( "les", "leading-edge_subset", false, "apply filtering to leading-edge subsets" );
+        
+        options.addOption( "jc", "jaccard_coefficient", false, "use jaccard coefficient for the clustering" );
+        options.addOption( "oc", "overlap_coefficient", false, "use overlap coefficient for the clustering" );
         
         options.addOption( "wor", "without_report", false, "do not create rep file" );
         
@@ -183,6 +192,11 @@ public class RSAS {
                 pargs.setMin( Integer.parseInt(line.getOptionValue( "mi" )) );
             }
             
+            // for mcn
+            if( line.hasOption( "mcn" ) | line.hasOption( "minConNum" ) ) {
+                pargs.setMinConNum( Integer.parseInt(line.getOptionValue( "mcn" )) );
+            }
+            
             // for append
             if( line.hasOption( "a" ) | line.hasOption( "append" ) ) {
                 pargs.setAppend(true);
@@ -231,6 +245,15 @@ public class RSAS {
             // for les
             if( line.hasOption( "les" ) | line.hasOption( "leading-edge_subset" ) ) {
                 pargs.setLes(true);
+            }
+            
+            // for jc
+            if( line.hasOption( "jc" ) | line.hasOption( "jaccard_coefficient" ) ) {
+                pargs.setJc(true);
+            }
+            // for oc
+            if( line.hasOption( "oc" ) | line.hasOption( "overlap_coefficient" ) ) {
+                pargs.setOc(true);
             }
             
             // for without report
