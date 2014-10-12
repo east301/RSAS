@@ -5,33 +5,17 @@
  */
 package bio.tit.narise.rsas.mode.factory.clsmode.product;
 
-import java.util.List;
-
 /**
  *
  * @author tn
  */
 public class Member extends Cluster {
-    private int[] vector;
-
-    public Member(int id, String name, Cluster left, Cluster right, int depth, double height, int[] vector) {
-        super(id, name, left, right, depth, height);
+    private final int vecNum = 1;
+    private final int[] vector;
+    
+    public Member(String id, Cluster left, Cluster right, int depth, double height, int[] vector) {
+        super(id, left, right, depth, height);
         this.vector = vector;
-    }
-
-    @Override
-    public List<Member> getMembers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Cluster getLeft() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Cluster getRight() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -45,7 +29,11 @@ public class Member extends Cluster {
     }
 
     @Override
-    public void addMembers() {
-        throw new UnsupportedOperationException("Not supported.");
+    public int getVecNum() {
+        return this.vecNum;
+    }
+    
+    public int[] getVector() {
+        return this.vector;
     }
 }

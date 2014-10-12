@@ -36,33 +36,55 @@ public class ClstModeFactory {
     
     public void mkRowClusters() {
         List<String> rownamesTop = matrix.getRownamesTop();
+        int colNumTop = matrix.getColnamesTop().size();
         int[][] matTop = matrix.getMatrixTop();
         for(int i = 0; i < rownamesTop.size(); i++) {
-            Cluster mem = new Member(i, rownamesTop.get(i), null, null, 0, 0, matTop[i]);
+            int[] rowVec = new int[colNumTop];
+            for(int j = 0; j < colNumTop; j++) {
+                rowVec[j] = matTop[i][j];
+            }
+            Cluster mem = new Member(rownamesTop.get(i), null, null, 0, 0, rowVec);
             rowClustersTop.add(mem);
         }
         List<String> rownamesBottom = matrix.getRownamesBottom();
+        int colNumBottom = matrix.getColnamesBottom().size();
         int[][] matBottom = matrix.getMatrixBottom();
         for(int i = 0; i < rownamesBottom.size(); i++) {
-            Cluster mem = new Member(i, rownamesBottom.get(i), null, null, 0, 0, matBottom[i]);
+            int[] rowVec = new int[colNumBottom];
+            for(int j = 0; j < colNumBottom; j++) {
+                rowVec[j] = matBottom[i][j];
+            }
+            Cluster mem = new Member(rownamesBottom.get(i), null, null, 0, 0, rowVec);
             rowClustersBottom.add(mem);
         }
     }
     
     public void mkColClusters() {
         List<String> colnamesTop = matrix.getColnamesTop();
+        int rowNumTop = matrix.getRownamesTop().size();
         int[][] matTop = matrix.getMatrixTop();
         for(int i = 0; i < colnamesTop.size(); i++) {
-            Cluster mem = new Member(i, colnamesTop.get(i), null, null, 0, 0, matTop[i]);
+            int[] colVec = new int[rowNumTop];
+            for(int j = 0; j < rowNumTop; j++) {
+                colVec[j] = matTop[j][i];
+            }
+            Cluster mem = new Member(colnamesTop.get(i), null, null, 0, 0, colVec);
             colClustersTop.add(mem);
         }
         List<String> colnamesBottom = matrix.getColnamesBottom();
+        int rowNumBottom = matrix.getRownamesBottom().size();
         int[][] matBottom = matrix.getMatrixBottom();
         for(int i = 0; i < colnamesBottom.size(); i++) {
-            Cluster mem = new Member(i, colnamesBottom.get(i), null, null, 0, 0, matBottom[i]);
+            int[] colVec = new int[rowNumBottom];
+            for(int j = 0; j < rowNumBottom; j++) {
+                colVec[j] = matBottom[j][i];
+            }
+            Cluster mem = new Member(colnamesBottom.get(i), null, null, 0, 0, colVec);
             colClustersBottom.add(mem);
         }
     }
     
-    
+    public void mkHierarClusters() {
+        
+    }
 }
