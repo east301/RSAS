@@ -1,7 +1,7 @@
 package bio.tit.narise.rsas.model.factory.clstmode.tool;
 
-import bio.tit.narise.rsas.mode.factory.clsmode.product.Cluster;
-import bio.tit.narise.rsas.mode.factory.clsmode.product.CoeffResult;
+import bio.tit.narise.rsas.model.factory.clstmode.product.Cluster;
+import bio.tit.narise.rsas.model.factory.clstmode.product.CoeffResult;
 import java.util.concurrent.Callable;
 
 /**

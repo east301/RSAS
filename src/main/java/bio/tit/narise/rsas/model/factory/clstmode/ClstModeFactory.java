@@ -1,9 +1,9 @@
 package bio.tit.narise.rsas.model.factory.clstmode;
 
 import bio.tit.narise.rsas.controller.model.ParsedArgs;
-import bio.tit.narise.rsas.mode.factory.clsmode.product.Cluster;
-import bio.tit.narise.rsas.mode.factory.clsmode.product.HeatmapMatrix;
-import bio.tit.narise.rsas.mode.factory.clsmode.product.Member;
+import bio.tit.narise.rsas.model.factory.clstmode.product.Cluster;
+import bio.tit.narise.rsas.model.factory.clstmode.product.HeatmapMatrix;
+import bio.tit.narise.rsas.model.factory.clstmode.product.Member;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

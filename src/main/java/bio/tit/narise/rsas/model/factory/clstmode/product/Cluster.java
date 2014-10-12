@@ -1,4 +1,4 @@
-package bio.tit.narise.rsas.mode.factory.clsmode.product;
+package bio.tit.narise.rsas.model.factory.clstmode.product;
 
 /**
  *

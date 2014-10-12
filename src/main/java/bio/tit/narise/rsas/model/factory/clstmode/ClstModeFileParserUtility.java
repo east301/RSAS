@@ -1,6 +1,6 @@
 package bio.tit.narise.rsas.model.factory.clstmode;
 
-import bio.tit.narise.rsas.mode.factory.clsmode.product.HeatmapMatrix;
+import bio.tit.narise.rsas.model.factory.clstmode.product.HeatmapMatrix;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

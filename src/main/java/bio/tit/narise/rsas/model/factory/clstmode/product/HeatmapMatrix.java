@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package bio.tit.narise.rsas.mode.factory.clsmode.product;
+package bio.tit.narise.rsas.model.factory.clstmode.product;
 
 import java.util.ArrayList;
 import java.util.List;
