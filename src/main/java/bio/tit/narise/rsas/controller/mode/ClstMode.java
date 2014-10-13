@@ -2,31 +2,31 @@ package bio.tit.narise.rsas.controller.mode;
 
 import bio.tit.narise.rsas.controller.model.ParsedArgs;
 import bio.tit.narise.rsas.model.factory.clstmode.ClstModeFactory;
+import bio.tit.narise.rsas.model.factory.clstmode.product.HeatmapMatrix;
 import bio.tit.narise.rsas.model.factory.product.RSASResults;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  *
  * @author tn
  */
-public class ClstMode extends Mode {
+public class ClstMode {
+    private final ParsedArgs pargs;
     
-    ClstMode(ParsedArgs pargs) {
-        super(pargs);
+    public ClstMode(ParsedArgs pargs) {
+        this.pargs = pargs;
     }
     
-    public static Mode getInstance(ParsedArgs pargs) {
-        
-        Mode currentMode = new ClstMode(pargs);
-        return currentMode;
-    }
-    
-    @Override
-    public RSASResults handle() throws IOException {
+    public HeatmapMatrix clst() throws IOException, InterruptedException, ExecutionException {
         
         ClstModeFactory factory = new ClstModeFactory(this.pargs);
         factory.parseXlsFile();
-        
-        return null;
+        factory.mkClusters();
+        factory.mkHClusters();
+        factory.orderHeatmap();
+        return factory.getHeatmap();
     }
+
 }

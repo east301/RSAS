@@ -1,5 +1,8 @@
 package bio.tit.narise.rsas.model.factory.clstmode.product;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author tn
@@ -25,6 +28,19 @@ public class Members extends Cluster {
     @Override
     public int getVecNum() {
         return this.vecNum;
+    }
+
+    @Override
+    public int[] getVector() {
+        throw new UnsupportedOperationException("Not supported.");
+    }
+
+    @Override
+    public List<String> getOrderedId() {
+        List<String> orderedID = new ArrayList();
+        orderedID.addAll(left.getOrderedId());
+        orderedID.addAll(right.getOrderedId());
+        return orderedID;
     }
     
 }

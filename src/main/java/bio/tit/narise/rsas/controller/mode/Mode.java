@@ -38,7 +38,7 @@ public abstract class Mode {
             }
         }
         else {
-            currentMode = ClstMode.getInstance(pargs);
+            
         }
         return currentMode;
     }

@@ -21,16 +21,63 @@ public class CoeffCalculator implements Callable<CoeffResult>{
 
     @Override
     public CoeffResult call() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        CoeffResult coeffResult;
+        if(jc) {
+            coeffResult = calcJc();
+        }
+        else {
+            coeffResult = calcOc();
+        }
+        return coeffResult;
     }
     
     private CoeffResult calcJc() {
-        
-        return null;
+        int[] vec1 = clst1.getVector();
+        int[] vec2 = clst2.getVector();
+        double numer = 0;
+        double denomin = 0;
+        double coeff = 0;
+        for(int i = 0; i < vec1.length; i++) {
+            if(vec1[i] == 1 && vec2[i] == 1) {
+                numer++;
+                denomin++;
+            }
+            else if (vec1[i] == 1 || vec2[i] == 1) {
+                denomin++;
+            }
+        }
+        if(denomin > 0) {
+            coeff = numer / denomin;
+        }
+        return new CoeffResult(clst1, clst2, coeff);
     }
     
     private CoeffResult calcOc() {
-        
-        return null;
+        int[] vec1 = clst1.getVector();
+        int[] vec2 = clst2.getVector();
+        double numer = 0;
+        double vec1Size = 0;
+        double vec2Size = 0;
+        double coeff = 0;
+        for(int i = 0; i < vec1.length; i++) {
+            if(vec1[i] == 1 && vec2[i] == 1) {
+                numer++;
+                vec1Size++;
+                vec2Size++;
+            }
+            else if (vec1[i] == 1 && vec2[i] == 0) {
+                vec1Size++;
+            }
+            else if (vec1[i] == 0 && vec2[i] == 1) {
+                vec2Size++;
+            }
+        }
+        if(vec1Size <= vec2Size && vec1Size > 0) {
+            coeff = numer / vec1Size;
+        }
+        else if(vec1Size > vec2Size && vec2Size > 0) {
+            coeff = numer / vec2Size;
+        }
+        return new CoeffResult(clst1, clst2, coeff);
     }
 }

@@ -100,8 +100,8 @@ public class ClstModeFileParserUtility {
                 }
             }
             
-            HeatmapMatrix beforeclustering = new HeatmapMatrix(matrixTop, rownamesTop, colnamesTop, matrixBottom, rownamesBottom, colnamesBottom);
-            return beforeclustering;
+            HeatmapMatrix beforeClustering = new HeatmapMatrix(matrixTop, rownamesTop, colnamesTop, matrixBottom, rownamesBottom, colnamesBottom);
+            return beforeClustering;
         }
         else {
             { throw new IllegalArgumentException("Error in reading xls file: file does not exist or cannot be opened"); }

@@ -1,5 +1,7 @@
 package bio.tit.narise.rsas.model.factory.clstmode.product;
 
+import java.util.List;
+
 /**
  *
  * @author tn
@@ -37,4 +39,6 @@ public abstract class Cluster {
     public abstract Cluster getDepth();
     public abstract Cluster getHeight();
     public abstract int getVecNum();
+    public abstract int[] getVector();
+    public abstract List<String> getOrderedId();
 }

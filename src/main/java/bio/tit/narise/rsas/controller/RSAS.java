@@ -1,5 +1,6 @@
 package bio.tit.narise.rsas.controller;
 
+import bio.tit.narise.rsas.controller.mode.ClstMode;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -13,6 +14,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import bio.tit.narise.rsas.model.factory.product.RSASResults;
 import bio.tit.narise.rsas.controller.mode.Mode;
+import bio.tit.narise.rsas.model.factory.clstmode.product.HeatmapMatrix;
 
 /**
  *
@@ -273,14 +275,15 @@ public class RSAS {
             if(!pargs.isClstMode()) {
                 CreateXlsFileUtility.createSaveFile(pargs);
                 CreateReportFileUtility.createReportFile(pargs);
-            }
-            
-            Mode currentMode = Mode.getInstance(pargs);
-            RSASResults rsasResults = currentMode.handle();
-            
-            if(!pargs.isClstMode()) {
+                Mode currentMode = Mode.getInstance(pargs);
+                RSASResults rsasResults = currentMode.handle();
                 CreateXlsFileUtility.saveResults(rsasResults, pargs);
                 CreateReportFileUtility.closeReportFile();
+            }
+            else {
+                ClstMode currentMode = new ClstMode(pargs);
+                HeatmapMatrix matrix = currentMode.clst();
+                SaveHeatmap.save(matrix);
             }
             
             // calculation time

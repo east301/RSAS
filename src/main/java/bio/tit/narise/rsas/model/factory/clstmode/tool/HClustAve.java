@@ -27,7 +27,7 @@ public class HClustAve {
         this.pargs = pargs;
     }
     
-    public List<Cluster> hClust() throws InterruptedException, ExecutionException {
+    public Cluster hClust() throws InterruptedException, ExecutionException {
         
         // calc coefficients
         ExecutorService threadPoolCalcCoeff = Executors.newFixedThreadPool(pargs.getThreadNum());
@@ -122,6 +122,6 @@ public class HClustAve {
             clusters = newClusters;
         }
         
-        return clusters;
+        return clusters.get(0);
     }
 }
