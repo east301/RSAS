@@ -272,7 +272,7 @@ public class RSAS {
             
             pargs.checkArgs();
             
-            if(!pargs.isClstMode()) {
+            if(pargs.isGseaMode() || pargs.isFiltMode()) {
                 CreateXlsFileUtility.createSaveFile(pargs);
                 CreateReportFileUtility.createReportFile(pargs);
                 Mode currentMode = Mode.getInstance(pargs);
@@ -280,17 +280,23 @@ public class RSAS {
                 CreateXlsFileUtility.saveResults(rsasResults, pargs);
                 CreateReportFileUtility.closeReportFile();
             }
-            else {
+            
+            if(pargs.isClstMode()){
                 ClstMode currentMode = new ClstMode(pargs);
                 HeatmapMatrix matrix = currentMode.clst();
                 SaveHeatmap.save(matrix);
             }
             
-            // calculation time
-            System.out.println("[ Info ] Completed!");
-            long stop = System.currentTimeMillis();
-            System.out.println( (stop - start)/1000 + " sec" );
+            if(pargs.isGseaMode() || pargs.isFiltMode() || pargs.isClstMode()) {
+                // calculation time
+                System.out.println("[ Info ] Completed!");
+                long stop = System.currentTimeMillis();
+                System.out.println( (stop - start)/1000 + " sec" );
+            }
+            else {
+                HelpFormatter formatter = new HelpFormatter();
+                formatter.printHelp( "RSAS", options );
+            }
         }
-        
     }}
 }

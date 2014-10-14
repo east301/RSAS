@@ -542,40 +542,42 @@ public class ParsedArgs {
     
     private void checkModeOptions() {
         
-        if(gseaMode && filtMode | gseaMode && clstMode | filtMode && clstMode) { 
-            throw new IllegalArgumentException("Illegal mode selection: more than one mode is selected");
+        if(gseaMode && filtMode) { 
+            throw new IllegalArgumentException("Illegal mode selection: both gsea mode and filtering mode are selected");
         }
         else if(!gseaMode && !filtMode && !clstMode) { 
-            if(!xlspath.isEmpty()){
-                System.out.println("Use clustering mode");
-                setClstMode(true);
-            }
+            
             if(!reppath.isEmpty()){
                 System.out.println("Use filtering mode");
                 setFiltMode(true);
             }
-            else {
+            else if(!rpath.isEmpty() || !rppath.isEmpty()) {
                 System.out.println("Use gsea mode");
                 setGseaMode(true);
             }
-        }
-        
-        if(!clstMode) {
-            if(FCRRnkMode && FCRRnkpMode){ throw new IllegalArgumentException("both -cr and -cp options are selected"); }
-            else if(!FCRRnkMode && !FCRRnkpMode){
-                if(!rpath.isEmpty()){
-                    System.out.println("Use rank-based FCR");
-                    setFCRRnkMode(true);
-                }
-                else if(!rppath.isEmpty()){
-                    System.out.println("Use p-value-based FCR");
-                    setFCRRnkpMode(true);
-                }
+            
+            if(!xlspath.isEmpty()){
+                System.out.println("Use clustering mode");
+                setClstMode(true);
             }
         }
-        else {
+         
+        if(FCRRnkMode && FCRRnkpMode){ throw new IllegalArgumentException("both -cr and -cp options are selected"); }
+        else if(!FCRRnkMode && !FCRRnkpMode){
+            if(!rpath.isEmpty()){
+                System.out.println("Use rank-based FCR");
+                setFCRRnkMode(true);
+            }
+            else if(!rppath.isEmpty()){
+                System.out.println("Use p-value-based FCR");
+                setFCRRnkpMode(true);
+            }
+        }
+        
+        if(clstMode) {
             if(jc && oc) { throw new IllegalArgumentException("both -jc and -oc options are selected"); }
             else if (!jc && !oc) {
+                System.out.println("Use jaccard coefficient for the clustering");
                 setJc(true); // default is jaccard coefficient
             }
         }
@@ -586,7 +588,7 @@ public class ParsedArgs {
         if(gseaMode){
             
             if( spath.isEmpty() ){
-                throw new IllegalArgumentException("-s option is required");
+                throw new IllegalArgumentException("-s option is required for gsea mode");
             }
             if(!gmt && !gmx) {
                 if(spath.endsWith(".gmx")) {
@@ -607,7 +609,7 @@ public class ParsedArgs {
             }
             else if( !rpath.isEmpty() && rppath.isEmpty() ){
                 if( FCRRnkpMode ) {
-                    throw new IllegalArgumentException("rnkp file is required for calculation of p-value-based FCR");
+                    throw new IllegalArgumentException("rnkp file is required for the calculation of p-value-based FCR");
                 }
             }
             else if( !rpath.isEmpty() && !rppath.isEmpty() ){
@@ -617,13 +619,14 @@ public class ParsedArgs {
         else if(filtMode){
             
             if( reppath.isEmpty() ){
-                throw new IllegalArgumentException("-rep option is required");
+                throw new IllegalArgumentException("-rep option is required for filtering mode");
             }
         }
-        else if(clstMode){
+        
+        if(clstMode){
             
             if( xlspath.isEmpty() ){
-                throw new IllegalArgumentException("-xls option is required");
+                throw new IllegalArgumentException("-xls option is required for clustering mode");
             }
         }
     }
@@ -686,6 +689,7 @@ public class ParsedArgs {
             }
         }
     }
+    
     // private methods for setFCRFiltMode and checkRepFileArgs()
     private boolean checkBeforeReadfile(File file) {
         

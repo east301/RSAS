@@ -47,7 +47,10 @@ public class ClstModeFileParserUtility {
                 String[] lineList = line.trim().split("\t");
                 if(lineList.length == 11) {
                     
-                    String[] contris = lineList[9].split(", ");
+                    String[] contris = lineList[9].replaceAll("^\"|\"$", "").split(", ");
+                    //System.out.println(lineList[9]);
+                    if(contris[0].equals("Contributors")){ continue; }
+                    if(contris[0].isEmpty()){ continue; }
                     if(contris.length >= mcn) {
                         if(!bottomFlag) {
                             rownamesTop.add(lineList[0]);
@@ -55,6 +58,7 @@ public class ClstModeFileParserUtility {
                             for(String contri: contris) {
                                 if(!colnamesTop.contains(contri)){
                                     colnamesTop.add(contri);
+                                    //System.out.println(contri);
                                 }
                             }
                         }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bio.tit.narise.rsas.controller;
 
 import bio.tit.narise.rsas.model.factory.clstmode.product.HeatmapMatrix;
@@ -22,6 +17,8 @@ public class SaveHeatmap {
     private SaveHeatmap(){ throw new UnsupportedOperationException(); }
     
     static void save(HeatmapMatrix matrix) throws IOException {
+        System.out.println("[ Info ] Saving matrix");
+        
         int matrixTop[][] = matrix.getMatrixTop();
         List<String> rownamesTop = matrix.getRownamesTop();
         List<String> colnamesTop = matrix.getColnamesTop();

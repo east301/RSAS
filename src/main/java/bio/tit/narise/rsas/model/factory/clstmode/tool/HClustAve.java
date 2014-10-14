@@ -17,7 +17,7 @@ import java.util.concurrent.Future;
  * @author Takafumi
  */
 public class HClustAve {
-    private Integer clstId = 0;
+    private int clstId = 0;
     private List<Cluster> clusters;
     private final ParsedArgs pargs;
     private List<CoeffResult> coeffResults = new ArrayList();
@@ -36,7 +36,7 @@ public class HClustAve {
             final Cluster clst1 = clusters.get(i);
             for(int j = i + 1; j < clusters.size(); j++) {
                 final Cluster clst2 = clusters.get(j);
-                CoeffCalculator coeffCalculator = new CoeffCalculator(clst1, clst2, pargs.isJc());
+                final CoeffCalculator coeffCalculator = new CoeffCalculator(clst1, clst2, pargs.isJc());
                 processesCalcCoeff.add(coeffCalculator);
             }
         }
@@ -55,11 +55,12 @@ public class HClustAve {
         
         // hClust
         while(clusters.size() > 1) {
-            double maxCoeff = 0;
+            double maxCoeff = -0.1;
             Cluster left = null;
             Cluster right = null;
             for(CoeffResult res: coeffResults) {
                 if(res.getCoeff() > maxCoeff) {
+                    maxCoeff = res.getCoeff();
                     left = res.getClst1();
                     right = res.getClst2();
                 }
@@ -75,7 +76,10 @@ public class HClustAve {
             
             // create new Cluster (left + right)
             this.clstId++;
-            Cluster newCluster = new Members(clstId.toString(), left, right, clstId, 1-maxCoeff);
+            Cluster newCluster = new Members(String.valueOf(clstId), left, right, clstId, 1 - maxCoeff);
+            
+            System.out.println("[ Info ] Depth of new cluster: " + clstId);
+            System.out.println(1 - maxCoeff);
             
             // coefficients without left and right
             List<CoeffResult> newCoeffResults = new ArrayList();
@@ -90,6 +94,8 @@ public class HClustAve {
             }
             
             // calc coeff between newCluster and cluster in clustersWoLR (UPGMA method)
+            if(left == null) { throw new NullPointerException("left is null"); }
+            if(right == null) { throw new NullPointerException("right is null"); }
             double leftVecNum = left.getVecNum();
             double rightVecNum = right.getVecNum();
             double lrVecNum = leftVecNum + rightVecNum;
@@ -117,11 +123,12 @@ public class HClustAve {
 
             coeffResults = newCoeffResults;
             
-            List<Cluster> newClusters = clustersWoLR;
+            List<Cluster> newClusters = new ArrayList();
             newClusters.add(newCluster);
+            newClusters.addAll(clustersWoLR);
             clusters = newClusters;
         }
-        
+        System.out.println("TopCluster: " + clusters.get(0).getId());
         return clusters.get(0);
     }
 }

@@ -37,6 +37,7 @@ public class ClstModeFactory {
     }
     
     public void mkClusters() {
+        System.out.println("[ Info ] Reading matrix");
         List<String> rownamesTop = matrix.getRownamesTop();
         int colNumTop = matrix.getColnamesTop().size();
         int[][] matTop = matrix.getMatrixTop();
@@ -85,57 +86,68 @@ public class ClstModeFactory {
     }
     
     public void mkHClusters() throws InterruptedException, ExecutionException {
+        System.out.println("[ Info ] Clustering");
+        System.out.println("Clustering of the item sets enriched at the top");
         HClustAve hClustAveRowTop = new HClustAve(clustersRowTop, pargs);
-        HClustAve hClustAveColTop = new HClustAve(clustersColTop, pargs);
-        HClustAve hClustAveRowBottom = new HClustAve(clustersRowBottom, pargs);
-        HClustAve hClustAveColBottom = new HClustAve(clustersColBottom, pargs);
         topClstRowTop = hClustAveRowTop.hClust();
+        System.out.println("Clustering of the items in the item sets enriched at the top");
+        HClustAve hClustAveColTop = new HClustAve(clustersColTop, pargs);
         topClstColTop = hClustAveColTop.hClust();
+        System.out.println("Clustering of the item sets enriched at the bottom");
+        HClustAve hClustAveRowBottom = new HClustAve(clustersRowBottom, pargs);
         topClstRowBottom = hClustAveRowBottom.hClust();
+        System.out.println("Clustering of the items in the item sets enriched at the bottom");
+        HClustAve hClustAveColBottom = new HClustAve(clustersColBottom, pargs);
         topClstColBottom = hClustAveColBottom.hClust();
     }
     
     public void orderHeatmap() {
+        System.out.println("[ Info ] Sorting matrix");
         List<String> orderedIdRowTop = topClstRowTop.getOrderedId();
         List<String> orderedIdColTop = topClstColTop.getOrderedId();
         List<String> orderedIdRowBottom = topClstRowBottom.getOrderedId();
         List<String> orderedIdColBottom = topClstColBottom.getOrderedId();
         
-        List<Integer> indexFromToRowTop = new ArrayList();
-        for(String id: matrix.getRownamesTop()) {
-            for(int i = 0; i < orderedIdRowTop.size(); i++) {
-                if(id.equals(orderedIdRowTop.get(i))) {
-                    indexFromToRowTop.add(i);
+        List<String> idRowTop = matrix.getRownamesTop();
+        List<String> idColTop = matrix.getColnamesTop();
+        List<String> idRowBottom = matrix.getRownamesBottom();
+        List<String> idColBottom = matrix.getColnamesBottom();
+        
+        List<Integer> indexFromIdRowTop = new ArrayList();
+        for(String id: orderedIdRowTop) {
+            for(int i = 0; i < idRowTop.size(); i++) {
+                if(id.equals(idRowTop.get(i))) {
+                    indexFromIdRowTop.add(i);
                     break;
                 }
             }
         }
         
-        List<Integer> indexFromToColTop = new ArrayList();
-        for(String id: matrix.getColnamesTop()) {
-            for(int i = 0; i < orderedIdColTop.size(); i++) {
-                if(id.equals(orderedIdColTop.get(i))) {
-                    indexFromToColTop.add(i);
+        List<Integer> indexFromIdColTop = new ArrayList();
+        for(String id: orderedIdColTop) {
+            for(int i = 0; i < idColTop.size(); i++) {
+                if(id.equals(idColTop.get(i))) {
+                    indexFromIdColTop.add(i);
                     break;
                 }
             }
         }
         
-        List<Integer> indexFromToRowBottom = new ArrayList();
-        for(String id: matrix.getRownamesBottom()) {
-            for(int i = 0; i < orderedIdRowBottom.size(); i++) {
-                if(id.equals(orderedIdRowBottom.get(i))) {
-                    indexFromToRowBottom.add(i);
+        List<Integer> indexFromIdRowBottom = new ArrayList();
+        for(String id: orderedIdRowBottom) {
+            for(int i = 0; i < idRowBottom.size(); i++) {
+                if(id.equals(idRowBottom.get(i))) {
+                    indexFromIdRowBottom.add(i);
                     break;
                 }
             }
         }
         
-        List<Integer> indexFromToColBottom = new ArrayList();
-        for(String id: matrix.getColnamesBottom()) {
-            for(int i = 0; i < orderedIdColBottom.size(); i++) {
-                if(id.equals(orderedIdColBottom.get(i))) {
-                    indexFromToColBottom.add(i);
+        List<Integer> indexFromIdColBottom = new ArrayList();
+        for(String id: orderedIdColBottom) {
+            for(int i = 0; i < idColBottom.size(); i++) {
+                if(id.equals(idColBottom.get(i))) {
+                    indexFromIdColBottom.add(i);
                     break;
                 }
             }
@@ -147,16 +159,25 @@ public class ClstModeFactory {
         int[][] matrixTop = matrix.getMatrixTop();
         int[][] matrixBottom = matrix.getMatrixBottom();
         
-        for(int i = 0; i < indexFromToRowTop.size(); i++) {
-            for(int j = 0; j < indexFromToColTop.size(); j++) {
-                orderedMatrixTop[i][j] = matrixTop[indexFromToRowTop.get(i)][indexFromToColTop.get(j)];
+        for(int i = 0; i < indexFromIdRowTop.size(); i++) {
+            for(int j = 0; j < indexFromIdColTop.size(); j++) {
+                orderedMatrixTop[i][j] = matrixTop[indexFromIdRowTop.get(i)][indexFromIdColTop.get(j)];
             }
         }
-        for(int i = 0; i < indexFromToRowBottom.size(); i++) {
-            for(int j = 0; j < indexFromToColBottom.size(); j++) {
-                orderedMatrixBottom[i][j] = matrixBottom[indexFromToRowBottom.get(i)][indexFromToColBottom.get(j)];
+        for(int i = 0; i < indexFromIdRowBottom.size(); i++) {
+            for(int j = 0; j < indexFromIdColBottom.size(); j++) {
+                orderedMatrixBottom[i][j] = matrixBottom[indexFromIdRowBottom.get(i)][indexFromIdColBottom.get(j)];
             }
         }
+        
+        // for debug
+        //System.out.println(orderedIdRowTop);
+        //System.out.println(idRowTop);
+        //System.out.println(indexFromIdRowTop);
+        //System.out.println();
+        //System.out.println(orderedIdColTop);
+        //System.out.println(idColTop);
+        //System.out.println(indexFromIdColTop);
         
         HeatmapMatrix afterClustering = new HeatmapMatrix(
                 orderedMatrixTop, orderedIdRowTop, orderedIdColTop, 

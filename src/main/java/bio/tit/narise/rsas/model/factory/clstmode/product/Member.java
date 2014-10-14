@@ -24,16 +24,6 @@ public class Member extends Cluster {
     }
 
     @Override
-    public Cluster getDepth() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Cluster getHeight() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public int getVecNum() {
         return this.vecNum;
     }
@@ -45,6 +35,7 @@ public class Member extends Cluster {
 
     @Override
     public List<String> getOrderedId() {
+        // System.out.println(this.id);
         return this.idAsList;
     }
 }

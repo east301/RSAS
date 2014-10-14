@@ -36,8 +36,14 @@ public abstract class Cluster {
         return this.right;
     }
     
-    public abstract Cluster getDepth();
-    public abstract Cluster getHeight();
+    public int getDepth() {
+        return this.depth;
+    }
+    
+    public double getHeight() {
+        return this.height;
+    }
+    
     public abstract int getVecNum();
     public abstract int[] getVector();
     public abstract List<String> getOrderedId();
