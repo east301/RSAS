@@ -18,11 +18,9 @@ public abstract class Cluster {
     protected double dist;
     
     
-    public Cluster(int id, String name, Cluster left, Cluster right, int depth, double dist){
+    public Cluster(int id, String name, int depth, double dist){
         this.id = id;
         this.name = name;
-        this.left = left;
-        this.right = right;
         this.depth = depth;
         this.dist = dist;
     }

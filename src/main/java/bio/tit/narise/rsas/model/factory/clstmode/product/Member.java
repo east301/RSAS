@@ -18,7 +18,9 @@ public class Member extends Cluster {
     private final List<String> nameAsList = new ArrayList();
     
     public Member(int id, String name, Cluster left, Cluster right, int depth, double dist, int[] vector) {
-        super(id, name, left, right, depth, dist);
+        super(id, name, depth, dist);
+        super.left = null;
+        super.right = null;
         super.clstNum = 1;
         this.vector = vector;
         this.idAsList.add(id);
