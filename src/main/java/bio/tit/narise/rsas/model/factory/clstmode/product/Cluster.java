@@ -7,25 +7,32 @@ import java.util.List;
  * @author tn
  */
 public abstract class Cluster {
-    protected String id;
+    protected int id;
+    protected String name;
     
     protected Cluster left;
     protected Cluster right;
+    protected int clstNum;
     
     protected int depth;
-    protected double height;
+    protected double dist;
     
     
-    public Cluster(String id, Cluster left, Cluster right, int depth, double height){
+    public Cluster(int id, String name, Cluster left, Cluster right, int depth, double dist){
         this.id = id;
+        this.name = name;
         this.left = left;
         this.right = right;
         this.depth = depth;
-        this.height = height;
+        this.dist = dist;
     }
     
-    public String getId() {
+    public int getId() {
         return this.id;
+    }
+    
+    public String getName() {
+        return this.name;
     }
     
     public Cluster getLeft() {
@@ -36,15 +43,19 @@ public abstract class Cluster {
         return this.right;
     }
     
+    public int getClstNum() {
+        return this.clstNum;
+    }
+    
     public int getDepth() {
         return this.depth;
     }
     
-    public double getHeight() {
-        return this.height;
+    public double getDist() {
+        return this.dist;
     }
     
-    public abstract int getVecNum();
     public abstract int[] getVector();
-    public abstract List<String> getOrderedId();
+    public abstract List<Integer> getOrderedId();
+    public abstract List<String> getOrderedName();
 }

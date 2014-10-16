@@ -46,7 +46,7 @@ public class ClstModeFactory {
             for(int j = 0; j < colNumTop; j++) {
                 rowVec[j] = matTop[i][j];
             }
-            Cluster mem = new Member(rownamesTop.get(i), null, null, 0, 0, rowVec);
+            Cluster mem = new Member(i, rownamesTop.get(i), null, null, 0, 0, rowVec);
             clustersRowTop.add(mem);
         }
         
@@ -58,7 +58,7 @@ public class ClstModeFactory {
             for(int j = 0; j < colNumBottom; j++) {
                 rowVec[j] = matBottom[i][j];
             }
-            Cluster mem = new Member(rownamesBottom.get(i), null, null, 0, 0, rowVec);
+            Cluster mem = new Member(i, rownamesBottom.get(i), null, null, 0, 0, rowVec);
             clustersRowBottom.add(mem);
         }
 
@@ -69,7 +69,7 @@ public class ClstModeFactory {
             for(int j = 0; j < rowNumTop; j++) {
                 colVec[j] = matTop[j][i];
             }
-            Cluster mem = new Member(colnamesTop.get(i), null, null, 0, 0, colVec);
+            Cluster mem = new Member(i, colnamesTop.get(i), null, null, 0, 0, colVec);
             clustersColTop.add(mem);
         }
         
@@ -80,7 +80,7 @@ public class ClstModeFactory {
             for(int j = 0; j < rowNumBottom; j++) {
                 colVec[j] = matBottom[j][i];
             }
-            Cluster mem = new Member(colnamesBottom.get(i), null, null, 0, 0, colVec);
+            Cluster mem = new Member(i, colnamesBottom.get(i), null, null, 0, 0, colVec);
             clustersColBottom.add(mem);
         }
     }
@@ -103,55 +103,11 @@ public class ClstModeFactory {
     
     public void orderHeatmap() {
         System.out.println("[ Info ] Sorting matrix");
-        List<String> orderedIdRowTop = topClstRowTop.getOrderedId();
-        List<String> orderedIdColTop = topClstColTop.getOrderedId();
-        List<String> orderedIdRowBottom = topClstRowBottom.getOrderedId();
-        List<String> orderedIdColBottom = topClstColBottom.getOrderedId();
+        List<Integer> orderedIdRowTop = topClstRowTop.getOrderedId();
+        List<Integer> orderedIdColTop = topClstColTop.getOrderedId();
+        List<Integer> orderedIdRowBottom = topClstRowBottom.getOrderedId();
+        List<Integer> orderedIdColBottom = topClstColBottom.getOrderedId();
         
-        List<String> idRowTop = matrix.getRownamesTop();
-        List<String> idColTop = matrix.getColnamesTop();
-        List<String> idRowBottom = matrix.getRownamesBottom();
-        List<String> idColBottom = matrix.getColnamesBottom();
-        
-        List<Integer> indexFromIdRowTop = new ArrayList();
-        for(String id: orderedIdRowTop) {
-            for(int i = 0; i < idRowTop.size(); i++) {
-                if(id.equals(idRowTop.get(i))) {
-                    indexFromIdRowTop.add(i);
-                    break;
-                }
-            }
-        }
-        
-        List<Integer> indexFromIdColTop = new ArrayList();
-        for(String id: orderedIdColTop) {
-            for(int i = 0; i < idColTop.size(); i++) {
-                if(id.equals(idColTop.get(i))) {
-                    indexFromIdColTop.add(i);
-                    break;
-                }
-            }
-        }
-        
-        List<Integer> indexFromIdRowBottom = new ArrayList();
-        for(String id: orderedIdRowBottom) {
-            for(int i = 0; i < idRowBottom.size(); i++) {
-                if(id.equals(idRowBottom.get(i))) {
-                    indexFromIdRowBottom.add(i);
-                    break;
-                }
-            }
-        }
-        
-        List<Integer> indexFromIdColBottom = new ArrayList();
-        for(String id: orderedIdColBottom) {
-            for(int i = 0; i < idColBottom.size(); i++) {
-                if(id.equals(idColBottom.get(i))) {
-                    indexFromIdColBottom.add(i);
-                    break;
-                }
-            }
-        }
         
         // order matrix
         int[][] orderedMatrixTop = new int[orderedIdRowTop.size()][orderedIdColTop.size()];
@@ -159,29 +115,20 @@ public class ClstModeFactory {
         int[][] matrixTop = matrix.getMatrixTop();
         int[][] matrixBottom = matrix.getMatrixBottom();
         
-        for(int i = 0; i < indexFromIdRowTop.size(); i++) {
-            for(int j = 0; j < indexFromIdColTop.size(); j++) {
-                orderedMatrixTop[i][j] = matrixTop[indexFromIdRowTop.get(i)][indexFromIdColTop.get(j)];
+        for(int i = 0; i < orderedIdRowTop.size(); i++) {
+            for(int j = 0; j < orderedIdColTop.size(); j++) {
+                orderedMatrixTop[i][j] = matrixTop[orderedIdRowTop.get(i)][orderedIdColTop.get(j)];
             }
         }
-        for(int i = 0; i < indexFromIdRowBottom.size(); i++) {
-            for(int j = 0; j < indexFromIdColBottom.size(); j++) {
-                orderedMatrixBottom[i][j] = matrixBottom[indexFromIdRowBottom.get(i)][indexFromIdColBottom.get(j)];
+        for(int i = 0; i < orderedIdRowBottom.size(); i++) {
+            for(int j = 0; j < orderedIdColBottom.size(); j++) {
+                orderedMatrixBottom[i][j] = matrixBottom[orderedIdRowBottom.get(i)][orderedIdColBottom.get(j)];
             }
         }
-        
-        // for debug
-        //System.out.println(orderedIdRowTop);
-        //System.out.println(idRowTop);
-        //System.out.println(indexFromIdRowTop);
-        //System.out.println();
-        //System.out.println(orderedIdColTop);
-        //System.out.println(idColTop);
-        //System.out.println(indexFromIdColTop);
         
         HeatmapMatrix afterClustering = new HeatmapMatrix(
-                orderedMatrixTop, orderedIdRowTop, orderedIdColTop, 
-                orderedMatrixBottom, orderedIdRowBottom, orderedIdColBottom);
+                orderedMatrixTop, topClstRowTop.getOrderedName(), topClstColTop.getOrderedName(), 
+                orderedMatrixBottom, topClstRowBottom.getOrderedName(), topClstColBottom.getOrderedName());
         this.matrix = afterClustering;
     }
     

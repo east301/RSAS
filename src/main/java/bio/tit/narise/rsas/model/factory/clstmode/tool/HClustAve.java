@@ -17,7 +17,8 @@ import java.util.concurrent.Future;
  * @author Takafumi
  */
 public class HClustAve {
-    private int clstId = 0;
+    private int clstId;
+    private int depth = 0;
     private List<Cluster> clusters;
     private final ParsedArgs pargs;
     private List<CoeffResult> coeffResults = new ArrayList();
@@ -25,6 +26,7 @@ public class HClustAve {
     public HClustAve(List<Cluster> clusters, ParsedArgs pargs) {
         this.clusters = clusters;
         this.pargs = pargs;
+        this.clstId = clusters.size();
     }
     
     public Cluster hClust() throws InterruptedException, ExecutionException {
@@ -76,10 +78,11 @@ public class HClustAve {
             
             // create new Cluster (left + right)
             this.clstId++;
-            Cluster newCluster = new Members(String.valueOf(clstId), left, right, clstId, 1 - maxCoeff);
+            this.depth++;
+            Cluster newCluster = new Members(clstId, null, left, right, depth, 1 - maxCoeff);
             
-            System.out.println("[ Info ] Depth of new cluster: " + clstId);
-            System.out.println(1 - maxCoeff);
+            System.out.println("[ Info ] Depth of new cluster: " + depth);
+            System.out.println("Distance: " + (1 - maxCoeff));
             
             // coefficients without left and right
             List<CoeffResult> newCoeffResults = new ArrayList();
@@ -96,8 +99,8 @@ public class HClustAve {
             // calc coeff between newCluster and cluster in clustersWoLR (UPGMA method)
             if(left == null) { throw new NullPointerException("left is null"); }
             if(right == null) { throw new NullPointerException("right is null"); }
-            double leftVecNum = left.getVecNum();
-            double rightVecNum = right.getVecNum();
+            double leftVecNum = left.getClstNum();
+            double rightVecNum = right.getClstNum();
             double lrVecNum = leftVecNum + rightVecNum;
             for (Cluster target : clustersWoLR) {
                 double coeffVsLeft = 0;

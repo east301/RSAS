@@ -8,16 +8,10 @@ import java.util.List;
  * @author tn
  */
 public class Members extends Cluster {
-    private final int vecNum;
     
-    public Members(String id, Cluster left, Cluster right, int depth, double height) {
-        super(id, left, right, depth, height);
-        this.vecNum = left.getVecNum() + right.getVecNum();
-    }
-
-    @Override
-    public int getVecNum() {
-        return this.vecNum;
+    public Members(int id, String name, Cluster left, Cluster right, int depth, double dist) {
+        super(id, name, left, right, depth, dist);
+        super.clstNum = left.getClstNum() + right.getClstNum();
     }
 
     @Override
@@ -26,15 +20,20 @@ public class Members extends Cluster {
     }
 
     @Override
-    public List<String> getOrderedId() {
-        List<String> orderedID = new ArrayList();
+    public List<Integer> getOrderedId() {
+        List<Integer> orderedId = new ArrayList();
         
-        // for debug
-        // System.out.println(this.id);
-        
-        orderedID.addAll(left.getOrderedId());
-        orderedID.addAll(right.getOrderedId());
-        return orderedID;
+        orderedId.addAll(left.getOrderedId());
+        orderedId.addAll(right.getOrderedId());
+        return orderedId;
     }
     
+    @Override
+    public List<String> getOrderedName() {
+        List<String> orderedName = new ArrayList();
+        
+        orderedName.addAll(left.getOrderedName());
+        orderedName.addAll(right.getOrderedName());
+        return orderedName;
+    }
 }

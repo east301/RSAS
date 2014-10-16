@@ -13,19 +13,16 @@ import java.util.List;
  * @author tn
  */
 public class Member extends Cluster {
-    private final int vecNum = 1;
     private final int[] vector;
-    private final List<String> idAsList = new ArrayList();
+    private final List<Integer> idAsList = new ArrayList();
+    private final List<String> nameAsList = new ArrayList();
     
-    public Member(String id, Cluster left, Cluster right, int depth, double height, int[] vector) {
-        super(id, left, right, depth, height);
+    public Member(int id, String name, Cluster left, Cluster right, int depth, double dist, int[] vector) {
+        super(id, name, left, right, depth, dist);
+        super.clstNum = 1;
         this.vector = vector;
         this.idAsList.add(id);
-    }
-
-    @Override
-    public int getVecNum() {
-        return this.vecNum;
+        this.nameAsList.add(name);
     }
     
     @Override
@@ -34,8 +31,12 @@ public class Member extends Cluster {
     }
 
     @Override
-    public List<String> getOrderedId() {
-        // System.out.println(this.id);
+    public List<Integer> getOrderedId() {
         return this.idAsList;
+    }
+    
+    @Override
+    public List<String> getOrderedName() {
+        return this.nameAsList;
     }
 }
