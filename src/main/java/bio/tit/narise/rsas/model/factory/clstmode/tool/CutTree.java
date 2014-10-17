@@ -26,7 +26,6 @@ public class CutTree {
         
         if(cutD < 1) {
             while(true) {
-                
                 for(Cluster clst: clusters) {
                     if(clst.getDist() >= cutD) {
                         nextClusters.add(clst.getLeft());
@@ -46,46 +45,46 @@ public class CutTree {
                     nextClusters.clear();
                 }
             }
-            
-            return clusters;
         }
         else if(cutK > 1) {
-            double dist = 0.99;
             while(true) {
-                while(true) {
-                    for(Cluster clst: clusters) {
-                        if(clst.getDist() >= dist) {
-                            nextClusters.add(clst.getLeft());
-                            nextClusters.add(clst.getRight());
-                        }
-                        else {
-                            nextClusters.add(clst);
-                        }
-                    }
-        
-                    if(clusters.size() == nextClusters.size()) {
-                        break;
-                    } 
-                    else {
-                        clusters.clear();
-                        clusters.addAll(nextClusters);
-                        nextClusters.clear();
+                double distMax = -0.1;
+                int indexMax = -1;
+                
+                for(int i = 0; i < clusters.size(); i++) {
+                    if(clusters.get(i).getDist() >= distMax) {
+                        indexMax = i;
                     }
                 }
                 
-                if(clusters.size() >= cutK) {
+                if(distMax == 0){
+                    break;
+                }
+                
+                for(int i = 0; i < clusters.size(); i++) {
+                    Cluster clst = clusters.get(i);
+                    if(i == indexMax) {
+                        nextClusters.add(clst.getLeft());
+                        nextClusters.add(clst.getRight());
+                    } 
+                    else {
+                        nextClusters.add(clst);
+                    }
+                }
+                
+                if(nextClusters.size() == cutK) {
                     break;
                 }
                 else {
-                    dist -= 0.01;
+                    clusters.clear();
+                    clusters.addAll(nextClusters);
+                    nextClusters.clear();
                 }
             }
-            
-            return clusters;
         }
         else {
             System.out.println("Error in cutting tree");
-            return clusters;
         }
+        return nextClusters;
     }
 }

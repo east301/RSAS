@@ -90,30 +90,35 @@ public class RSAS {
         
         options.addOption( OptionBuilder.withLongOpt( "max" )
                                 .withArgName("number")
-                                .withDescription( "specify the maximum number of the items in a set" )
+                                .withDescription( "specify the maximum number of items in a set" )
                                 .hasArg(true)
                                 .create("ma") );
         options.addOption( OptionBuilder.withLongOpt( "min" )
                                 .withArgName("number")
-                                .withDescription( "specify the minimum number of the items in a set" )
+                                .withDescription( "specify the minimum number of items in a set" )
                                 .hasArg(true)
                                 .create("mi") );
         
-        options.addOption( OptionBuilder.withLongOpt( "minConNum" )
+        options.addOption( OptionBuilder.withLongOpt( "min_con_num" )
                                 .withArgName("number")
                                 .withDescription( "item sets with less than the specified number of contributors are removed from the clustering" )
                                 .hasArg(true)
                                 .create("mcn") );
-        options.addOption( OptionBuilder.withLongOpt( "cut_distance" )
+        options.addOption( OptionBuilder.withLongOpt( "cut_dist" )
                                 .withArgName("distance")
                                 .withDescription( "cut a tree from hierarchical clustering of items at the specified distance (in the range 0 to 1)" )
                                 .hasArg(true)
                                 .create("cutD") );
-        options.addOption( OptionBuilder.withLongOpt( "cut_into_k" )
+        options.addOption( OptionBuilder.withLongOpt( "cut_into_k_clst" )
                                 .withArgName("number")
-                                .withDescription( "cut a tree from hierarchical clustering of items into k clusters" )
+                                .withDescription( "cut a tree from hierarchical clustering of items into the specified number of clusters" )
                                 .hasArg(true)
                                 .create("cutK") );
+        options.addOption( OptionBuilder.withLongOpt( "save_clst_num" )
+                                .withArgName("number")
+                                .withDescription( "specify the number of clusters to save" )
+                                .hasArg(true)
+                                .create("scn") );
         
 	options.addOption( "a", "append", false, "append output" );
 	options.addOption( "f", "force", false, "force overwrite" );
@@ -205,18 +210,23 @@ public class RSAS {
             }
             
             // for mcn
-            if( line.hasOption( "mcn" ) | line.hasOption( "minConNum" ) ) {
+            if( line.hasOption( "mcn" ) | line.hasOption( "min_con_num" ) ) {
                 pargs.setMinConNum( Integer.parseInt(line.getOptionValue( "mcn" )) );
             }
             
-            // for cut
-            if( line.hasOption( "cutD" ) | line.hasOption( "cut_distance" ) ) {
+            // for cutD
+            if( line.hasOption( "cutD" ) | line.hasOption( "cut_dist" ) ) {
                 pargs.setCutD( Double.parseDouble(line.getOptionValue( "cutD" )) );
             }
             
-            // for cut
-            if( line.hasOption( "cutK" ) | line.hasOption( "cut_into_k" ) ) {
+            // for cutK
+            if( line.hasOption( "cutK" ) | line.hasOption( "cut_into_k_clst" ) ) {
                 pargs.setCutK( Integer.parseInt(line.getOptionValue( "cutK" )) );
+            }
+            
+            // for scn
+            if( line.hasOption( "scn" ) | line.hasOption( "save_clst_num" ) ) {
+                pargs.setScn( Integer.parseInt(line.getOptionValue( "scn" )) );
             }
             
             // for append
@@ -307,7 +317,12 @@ public class RSAS {
                 SaveHeatmapUtility.saveHeatmap(res.getHeatmap());
                 
                 if(pargs.getCutD() < 1 || pargs.getCutK() > 1) {
-                    SaveHeatmapUtility.saveSubHeatmaps(res.getSubHeatmapsTop(), res.getSubHeatmapsBottom());
+                    if(res.getSubHeatmapsTop().size() > 0) {
+                        SaveHeatmapUtility.saveSubHeatmaps(res.getSubHeatmapsTop(), pargs.getScn(), "Top");
+                    }
+                    if(res.getSubHeatmapsBottom().size() > 0) {
+                        SaveHeatmapUtility.saveSubHeatmaps(res.getSubHeatmapsBottom(), pargs.getScn(), "Bottom");
+                    }
                 }
             }
             

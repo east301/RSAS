@@ -38,7 +38,7 @@ public class SaveHeatmapUtility {
         save(ofileBottom, matrixBottom, rownamesBottom, colnamesBottom);
     }
     
-    static void saveSubHeatmaps(List<SubHeatmapMatrix> subHeatmapsTop, List<SubHeatmapMatrix> subHeatmapsBottom) throws IOException {
+    static void saveSubHeatmaps(List<SubHeatmapMatrix> subHeatmaps, int scn, String topOrBottom) throws IOException {
         
         Comparator withColoredPixelNum = new Comparator() {
             @Override
@@ -55,30 +55,31 @@ public class SaveHeatmapUtility {
             }
         };
         
-        Collections.sort(subHeatmapsTop, withColoredPixelNum);
-        Collections.sort(subHeatmapsBottom, withColoredPixelNum);
+        Collections.sort(subHeatmaps, withColoredPixelNum);
         
-        for(int i = 0; i < subHeatmapsTop.size(); i++) {
-            SubHeatmapMatrix subMat = subHeatmapsTop.get(i);
+        for(int i = 0; i < subHeatmaps.size(); i++) {
+            SubHeatmapMatrix subMat = subHeatmaps.get(i);
+            int rowNum = subHeatmaps.get(i).getRownames().size();
+            int colNum = subHeatmaps.get(i).getColnames().size();
             
-            String filename = "heamapEnrichedAtTop_cluster" + (i+1) + "_size" + subMat.getColoredPixelNum() + ".tsv";
+            String filename = "heatmap" + topOrBottom + "_cluster" + (i+1) 
+                    + "_col" + rowNum 
+                    + "_row" + colNum 
+                    + "_score" + subMat.getColoredPixelNum() 
+                    + ".tsv";
+
             File file = new File(filename);
             
             save(file, subMat.getMatrix(), subMat.getRownames(), subMat.getColnames());
-        }
-        
-        for(int i = 0; i < subHeatmapsBottom.size(); i++) {
-            SubHeatmapMatrix subMat = subHeatmapsBottom.get(i);
-            
-            String filename = "heamapEnrichedAtBottom_cluster" + (i+1) + "_size" + subMat.getColoredPixelNum() + ".tsv";
-            File file = new File(filename);
-            
-            save(file, subMat.getMatrix(), subMat.getRownames(), subMat.getColnames());
+            if(i == scn - 1) {
+                break;
+            }
         }
     }
     
     // private method
     static private void save (File f, int[][] mat, List<String> rownames, List<String> colnames) throws IOException {
+        
         try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(f)))) {
             StringBuilder sb1 = new StringBuilder();
             for(String col: colnames) {
