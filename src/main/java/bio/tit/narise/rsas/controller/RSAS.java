@@ -14,7 +14,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import bio.tit.narise.rsas.model.factory.product.RSASResults;
 import bio.tit.narise.rsas.controller.mode.Mode;
-import bio.tit.narise.rsas.model.factory.clstmode.product.HeatmapMatrix;
+import bio.tit.narise.rsas.model.factory.clstmode.product.ClstModeResults;
 
 /**
  *
@@ -104,6 +104,16 @@ public class RSAS {
                                 .withDescription( "item sets with less than the specified number of contributors are removed from the clustering" )
                                 .hasArg(true)
                                 .create("mcn") );
+        options.addOption( OptionBuilder.withLongOpt( "cut_distance" )
+                                .withArgName("distance")
+                                .withDescription( "cut a tree from hierarchical clustering of items at the specified distance (in the range 0 to 1)" )
+                                .hasArg(true)
+                                .create("cutD") );
+        options.addOption( OptionBuilder.withLongOpt( "cut_into_k" )
+                                .withArgName("number")
+                                .withDescription( "cut a tree from hierarchical clustering of items into k clusters" )
+                                .hasArg(true)
+                                .create("cutK") );
         
 	options.addOption( "a", "append", false, "append output" );
 	options.addOption( "f", "force", false, "force overwrite" );
@@ -199,6 +209,16 @@ public class RSAS {
                 pargs.setMinConNum( Integer.parseInt(line.getOptionValue( "mcn" )) );
             }
             
+            // for cut
+            if( line.hasOption( "cutD" ) | line.hasOption( "cut_distance" ) ) {
+                pargs.setCutD( Double.parseDouble(line.getOptionValue( "cutD" )) );
+            }
+            
+            // for cut
+            if( line.hasOption( "cutK" ) | line.hasOption( "cut_into_k" ) ) {
+                pargs.setCutK( Integer.parseInt(line.getOptionValue( "cutK" )) );
+            }
+            
             // for append
             if( line.hasOption( "a" ) | line.hasOption( "append" ) ) {
                 pargs.setAppend(true);
@@ -283,8 +303,12 @@ public class RSAS {
             
             if(pargs.isClstMode()){
                 ClstMode currentMode = new ClstMode(pargs);
-                HeatmapMatrix matrix = currentMode.clst();
-                SaveHeatmap.save(matrix);
+                ClstModeResults res = currentMode.clst();
+                SaveHeatmapUtility.saveHeatmap(res.getHeatmap());
+                
+                if(pargs.getCutD() < 1 || pargs.getCutK() > 1) {
+                    SaveHeatmapUtility.saveSubHeatmaps(res.getSubHeatmapsTop(), res.getSubHeatmapsBottom());
+                }
             }
             
             if(pargs.isGseaMode() || pargs.isFiltMode() || pargs.isClstMode()) {

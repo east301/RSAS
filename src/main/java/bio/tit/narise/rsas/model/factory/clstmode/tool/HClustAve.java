@@ -19,14 +19,14 @@ import java.util.concurrent.Future;
 public class HClustAve {
     private int clstId;
     private int depth = 0;
-    private final List<Cluster> clusters;
+    private final List<Cluster> firstClusters;
     private final ParsedArgs pargs;
     private final HashMap<Cluster, HashMap<Cluster, Double>> coeffResults = new HashMap(); // HashMap<clst1, HashMap<clst2, coeff>>
     
-    public HClustAve(List<Cluster> clusters, ParsedArgs pargs) {
-        this.clusters = clusters;
+    public HClustAve(List<Cluster> firstClusters, ParsedArgs pargs) {
+        this.firstClusters = firstClusters;
         this.pargs = pargs;
-        this.clstId = clusters.size();
+        this.clstId = firstClusters.size();
     }
     
     public Cluster hClust() throws InterruptedException, ExecutionException {
@@ -36,11 +36,12 @@ public class HClustAve {
         // clst1.getId() < each clst2.getId()
         ExecutorService threadPoolCalcCoeff = Executors.newFixedThreadPool(pargs.getThreadNum());
         List<CoeffCalculator> processesCalcCoeff = new LinkedList();
-        for(int i = 0; i < clusters.size() -1; i++) {
-            final Cluster clst1 = clusters.get(i);
+        int firstClstNum = firstClusters.size();
+        for(int i = 0; i < firstClstNum - 1; i++) {
+            final Cluster clst1 = firstClusters.get(i);
             List<Cluster> clst2List = new ArrayList();
-            for(int j = i + 1; j < clusters.size(); j++) {
-                final Cluster clst2 = clusters.get(j);
+            for(int j = i + 1; j < firstClstNum; j++) {
+                final Cluster clst2 = firstClusters.get(j);
                 clst2List.add(clst2);
             }
             final CoeffCalculator coeffCalculator = new CoeffCalculator(clst1, clst2List, pargs.isJc());
@@ -59,7 +60,7 @@ public class HClustAve {
             this.coeffResults.putAll(coeffResult);
         }
         HashMap<Cluster, Double> empty = new HashMap();
-        this.coeffResults.put(clusters.get(clusters.size()-1), empty);
+        this.coeffResults.put(firstClusters.get(firstClstNum - 1), empty);
         
         // hClust
         while(true) {
@@ -78,8 +79,8 @@ public class HClustAve {
             }
             if(left == null) { throw new NullPointerException("left is null"); }
             if(right == null) { throw new NullPointerException("right is null"); }
-            double leftVecNum = left.getClstNum();
-            double rightVecNum = right.getClstNum();
+            double leftVecNum = left.getMemberNum();
+            double rightVecNum = right.getMemberNum();
             double lrVecNum = leftVecNum + rightVecNum;
             HashMap<Cluster, Double> left_clst2AndCoeff = coeffResults.get(left);
             HashMap<Cluster, Double> right_clst2AndCoeff = coeffResults.get(right);

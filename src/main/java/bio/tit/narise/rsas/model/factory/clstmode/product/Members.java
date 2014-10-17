@@ -21,7 +21,7 @@ public class Members extends Cluster {
             super.right = left;
         }
         
-        super.clstNum = left.getClstNum() + right.getClstNum();
+        super.clstNum = left.getMemberNum() + right.getMemberNum();
     }
 
     @Override

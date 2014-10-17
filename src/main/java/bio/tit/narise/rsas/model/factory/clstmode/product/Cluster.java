@@ -41,7 +41,7 @@ public abstract class Cluster {
         return this.right;
     }
     
-    public int getClstNum() {
+    public int getMemberNum() {
         return this.clstNum;
     }
     

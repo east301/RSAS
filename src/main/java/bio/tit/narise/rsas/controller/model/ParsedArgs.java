@@ -29,7 +29,10 @@ public class ParsedArgs {
     
     private Integer max = null;
     private Integer min = null;
+    
     private Integer mcn = null;
+    private Double cutD = null;
+    private Integer cutK = null;
     
     private boolean append = false;
     private boolean force = false;
@@ -227,6 +230,38 @@ public class ParsedArgs {
      */
     public void setMinConNum(int mcn) {
         this.mcn = mcn;
+    }
+    
+    /**
+     * 
+     * @return the cutD
+     */
+    public double getCutD() {
+        return cutD;
+    }
+    
+    /**
+     * 
+     * @param cutD the cutD to set
+     */
+    public void setCutD(double cutD) {
+        this.cutD = cutD;
+    }
+    
+    /**
+     * 
+     * @return the cutK
+     */
+    public int getCutK() {
+        return cutK;
+    }
+    
+    /**
+     * 
+     * @param cutK the cutK to set
+     */
+    public void setCutK(int cutK) {
+        this.cutK = cutK;
     }
     
     /**
@@ -455,10 +490,12 @@ public class ParsedArgs {
         if(max != null && max < 0){ throw new IllegalArgumentException("Illegal maximum size of items in a set"); }
 	if(min != null && min < 0){ throw new IllegalArgumentException("Illegal minimum size of items in a set"); }
         if(mcn != null && mcn < 0){ throw new IllegalArgumentException("Illegal minimum contributors number"); }
+        if(cutK != null && cutK < 1){ throw new IllegalArgumentException("Illegal clusters number"); }
         
         if(min == null){ min = 0; }
         if(max == null){ max = -1; }
         if(mcn == null){ mcn = 1; }
+        if(cutK == null){ cutK = -1; }
         
         if(threadNum == -1){ 
             if( Runtime.getRuntime().availableProcessors() == 1 ){ threadNum = 1; }
@@ -475,7 +512,10 @@ public class ParsedArgs {
         
         if(pVal == null){ pVal = 110.0; }
         if(fdr == null){ fdr = -1.0; }
-        if(fcr == null){ fcr = -1.0; }        
+        if(fcr == null){ fcr = -1.0; }
+        
+        if((cutD != null && cutD < 0) ||(cutD != null && cutD > 1)){ throw new IllegalArgumentException("Illegal cut distance"); }
+        if(cutD == null) { cutD = 1.1; }
     }
     
     private void checkOutputFile(File file) {
@@ -561,7 +601,7 @@ public class ParsedArgs {
                 setClstMode(true);
             }
         }
-         
+        
         if(FCRRnkMode && FCRRnkpMode){ throw new IllegalArgumentException("both -cr and -cp options are selected"); }
         else if(!FCRRnkMode && !FCRRnkpMode){
             if(!rpath.isEmpty()){
@@ -580,6 +620,8 @@ public class ParsedArgs {
                 System.out.println("Use jaccard coefficient for the clustering");
                 setJc(true); // default is jaccard coefficient
             }
+            
+            if(cutD < 1 && cutK > 1) { throw new IllegalArgumentException("both -cutD and -cutK options are selected"); }
         }
     }
     
