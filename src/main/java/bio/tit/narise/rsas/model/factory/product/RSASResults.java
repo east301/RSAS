@@ -44,7 +44,7 @@ public class RSASResults extends Result {
         return this;
     }
     
-    public void sort() {
+    public void sortWithPVal() {
         
         Comparator withPVal = new Comparator() {
             @Override
@@ -63,6 +63,27 @@ public class RSASResults extends Result {
         
         Collections.sort(resultsPos, withPVal);
         Collections.sort(resultsNeg, withPVal);
+    }
+    
+    public void sortWithNES() {
+        
+        Comparator withNES = new Comparator() {
+            @Override
+            public int compare(Object obj0, Object obj1) {
+                Double NES0 = ((RSASRes) obj0).getNES();
+                Double NES1 = ((RSASRes) obj1).getNES();
+                int ret;
+                if ((ret = NES1.compareTo(NES0)) == 0) {
+                    String id0 = ((RSASRes) obj0).getItemSetID();
+                    String id1 = ((RSASRes) obj1).getItemSetID();
+                    ret = id0.compareTo(id1);
+                }
+                return ret;
+            }
+        };
+        
+        Collections.sort(resultsPos, withNES);
+        Collections.sort(resultsNeg, withNES);
     }
     
     /**

@@ -73,20 +73,31 @@ public class HClustAve {
             for(Cluster clst1: coeffResults.keySet()) {
                 HashMap<Cluster, Double> clst2AndCoeff = coeffResults.get(clst1);
                 for(Cluster clst2: clst2AndCoeff.keySet()) {
-                    if(clst2AndCoeff.get(clst2) > maxCoeff) {
-                        maxCoeff = clst2AndCoeff.get(clst2);
+                    double coeffNow = clst2AndCoeff.get(clst2);
+                    if(coeffNow < maxCoeff) {
+                        continue;
+                    }
+                    
+                    if(coeffNow > maxCoeff) {
+                        maxCoeff = coeffNow;
                         left = clst1;
                         right = clst2;
+                        leftId = left.getId();
+                        rightId = right.getId();
                     }
-                    else if(clst2AndCoeff.get(clst2) == maxCoeff) {
-                        if(clst1.getId() > left.getId()) {
+                    else if(coeffNow == maxCoeff) {
+                        if(clst1.getId() > leftId) {
                             left = clst1;
                             right = clst2;
+                            leftId = left.getId();
+                            rightId = right.getId();
                         }
-                        else if (clst1.getId() == left.getId()) {
-                            if(clst2.getId() > right.getId()) {
+                        else if (clst1.getId() == leftId) {
+                            if(clst2.getId() > rightId) {
                                 left = clst1;
                                 right = clst2;
+                                leftId = left.getId();
+                                rightId = right.getId();
                             }
                         }
                     }

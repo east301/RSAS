@@ -33,7 +33,7 @@ public class ParsedArgs {
     private Integer mcn = null;
     private Double cutD = null;
     private Integer cutK = null;
-    private Integer scn = null;
+    private Integer cns = null;
     
     private boolean append = false;
     private boolean force = false;
@@ -267,18 +267,18 @@ public class ParsedArgs {
     
     /**
      * 
-     * @return the scn
+     * @return the cns
      */
-    public int getScn() {
-        return scn;
+    public int getCns() {
+        return cns;
     }
     
     /**
      * 
-     * @param scn the scn to set
+     * @param cns the cns to set
      */
-    public void setScn(int scn) {
-        this.scn = scn;
+    public void setCns(int cns) {
+        this.cns = cns;
     }
     
     /**
@@ -508,13 +508,13 @@ public class ParsedArgs {
 	if(min != null && min < 0){ throw new IllegalArgumentException("Illegal minimum size of items in a set"); }
         if(mcn != null && mcn < 0){ throw new IllegalArgumentException("Illegal minimum contributors number"); }
         if(cutK != null && cutK < 1){ throw new IllegalArgumentException("Illegal number of clusters to cut into"); }
-        if(scn != null && scn < 0){ throw new IllegalArgumentException("Illegal number of cluster to save"); }
+        if(cns != null && cns < 0){ throw new IllegalArgumentException("Illegal number of clusters to save"); }
         
         if(min == null){ min = 0; }
         if(max == null){ max = -1; }
         if(mcn == null){ mcn = 1; }
         if(cutK == null){ cutK = -1; }
-        if(scn == null){ scn = 15; }
+        if(cns == null){ cns = 15; }
         
         if(threadNum == -1){ 
             if( Runtime.getRuntime().availableProcessors() == 1 ){ threadNum = 1; }

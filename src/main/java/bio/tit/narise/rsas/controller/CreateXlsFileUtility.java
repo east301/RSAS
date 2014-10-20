@@ -36,9 +36,9 @@ public class CreateXlsFileUtility {
         double pVal = pargs.getpVal();
         double fdr = pargs.getFdr();
         
-        results.sort();
         if(pVal != 110.0 | fdr != -1.0){ results = filtResults(results, pVal, fdr); }
         
+        results.sortWithNES();
         File ofile = new File(pargs.getOpath());
         try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(ofile, true)))) {
             
@@ -90,6 +90,8 @@ public class CreateXlsFileUtility {
     }
     
     static private RSASResults filtResults(RSASResults results, double pVal, double fdr) {
+        
+        results.sortWithPVal();
         
         List<RSASRes> resultsPos = results.getResultsPos();
         List<RSASRes> resultsNeg = results.getResultsNeg();

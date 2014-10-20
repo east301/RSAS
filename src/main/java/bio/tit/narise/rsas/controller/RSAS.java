@@ -114,11 +114,11 @@ public class RSAS {
                                 .withDescription( "cut a tree from hierarchical clustering of items into the specified number of clusters" )
                                 .hasArg(true)
                                 .create("cutK") );
-        options.addOption( OptionBuilder.withLongOpt( "save_clst_num" )
+        options.addOption( OptionBuilder.withLongOpt( "clst_num_to_save" )
                                 .withArgName("number")
                                 .withDescription( "specify the number of clusters to save" )
                                 .hasArg(true)
-                                .create("scn") );
+                                .create("cns") );
         
 	options.addOption( "a", "append", false, "append output" );
 	options.addOption( "f", "force", false, "force overwrite" );
@@ -224,9 +224,9 @@ public class RSAS {
                 pargs.setCutK( Integer.parseInt(line.getOptionValue( "cutK" )) );
             }
             
-            // for scn
-            if( line.hasOption( "scn" ) | line.hasOption( "save_clst_num" ) ) {
-                pargs.setScn( Integer.parseInt(line.getOptionValue( "scn" )) );
+            // for cns
+            if( line.hasOption( "cns" ) | line.hasOption( "clst_num_to_save" ) ) {
+                pargs.setCns( Integer.parseInt(line.getOptionValue( "cns" )) );
             }
             
             // for append
@@ -318,10 +318,10 @@ public class RSAS {
                 
                 if(pargs.getCutD() < 1 || pargs.getCutK() > 1) {
                     if(res.getSubHeatmapsTop().size() > 0) {
-                        SaveHeatmapUtility.saveSubHeatmaps(res.getSubHeatmapsTop(), pargs.getScn(), "Top");
+                        SaveHeatmapUtility.saveSubHeatmaps(res.getSubHeatmapsTop(), pargs.getCns(), "Top");
                     }
                     if(res.getSubHeatmapsBottom().size() > 0) {
-                        SaveHeatmapUtility.saveSubHeatmaps(res.getSubHeatmapsBottom(), pargs.getScn(), "Bottom");
+                        SaveHeatmapUtility.saveSubHeatmaps(res.getSubHeatmapsBottom(), pargs.getCns(), "Bottom");
                     }
                 }
             }

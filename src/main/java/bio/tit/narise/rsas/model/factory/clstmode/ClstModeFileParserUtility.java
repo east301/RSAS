@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -75,6 +76,8 @@ public class ClstModeFileParserUtility {
                 }
             }
             
+            Collections.reverse(colnamesTop);
+            Collections.reverse(colnamesBottom);
             matrixTop = new int[rownamesTop.size()][colnamesTop.size()];
             matrixBottom = new int[rownamesBottom.size()][colnamesBottom.size()];
             for(int i = 0; i < rownamesTop.size(); i++) {

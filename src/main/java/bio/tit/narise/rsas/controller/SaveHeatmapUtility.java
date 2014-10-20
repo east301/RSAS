@@ -34,11 +34,17 @@ public class SaveHeatmapUtility {
         File ofileTop = new File("heamapEnrichedAtTop.tsv");
         File ofileBottom = new File("heamapEnrichedAtBottom.tsv");
         
-        save(ofileTop, matrixTop, rownamesTop, colnamesTop);
-        save(ofileBottom, matrixBottom, rownamesBottom, colnamesBottom);
+        saveAsHeatmapText(ofileTop, matrixTop, rownamesTop, colnamesTop);
+        saveAsHeatmapText(ofileBottom, matrixBottom, rownamesBottom, colnamesBottom);
+        
+        File ofileTop2 = new File("heamapEnrichedAtTopResource.tsv");
+        File ofileBottom2 = new File("heamapEnrichedAtBottomResource.tsv");
+        
+        saveAsHeatmapResource(ofileTop2, matrixTop, rownamesTop, colnamesTop);
+        saveAsHeatmapResource(ofileBottom2, matrixBottom, rownamesBottom, colnamesBottom);
     }
     
-    static void saveSubHeatmaps(List<SubHeatmapMatrix> subHeatmaps, int scn, String topOrBottom) throws IOException {
+    static void saveSubHeatmaps(List<SubHeatmapMatrix> subHeatmaps, int cns, String topOrBottom) throws IOException {
         
         Comparator withColoredPixelNum = new Comparator() {
             @Override
@@ -67,18 +73,23 @@ public class SaveHeatmapUtility {
                     + "_row" + colNum 
                     + "_score" + subMat.getColoredPixelNum() 
                     + ".tsv";
-
             File file = new File(filename);
+            saveAsHeatmapText(file, subMat.getMatrix(), subMat.getRownames(), subMat.getColnames());
             
-            save(file, subMat.getMatrix(), subMat.getRownames(), subMat.getColnames());
-            if(i == scn - 1) {
+            String filename2 = "heatmap" + topOrBottom + "_cluster" + (i+1)
+                    + "_resource"
+                    + ".tsv";
+            File file2 = new File(filename2);
+            saveAsHeatmapResource(file2, subMat.getMatrix(), subMat.getRownames(), subMat.getColnames());
+            
+            if(i == cns - 1) {
                 break;
             }
         }
     }
     
     // private method
-    static private void save (File f, int[][] mat, List<String> rownames, List<String> colnames) throws IOException {
+    static private void saveAsHeatmapText (File f, int[][] mat, List<String> rownames, List<String> colnames) throws IOException {
         
         try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(f)))) {
             StringBuilder sb1 = new StringBuilder();
@@ -98,6 +109,28 @@ public class SaveHeatmapUtility {
                 }
                 pw.write(sb2.toString().trim());
                 pw.println();
+            }
+        }
+    }
+    
+    // private method
+    static private void saveAsHeatmapResource (File f, int[][] mat, List<String> rownames, List<String> colnames) throws IOException {
+        
+        try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(f)))) {
+            
+            pw.write("rowname\tcolname\tvalue");
+            pw.println();
+            
+            for(int i = 0; i < rownames.size(); i++) {
+                for(int j = 0; j < colnames.size(); j++) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(rownames.get(i)).append("\t")
+                        .append(colnames.get(j)).append("\t")
+                        .append(String.valueOf(mat[i][j]));
+                    
+                    pw.write(sb.toString().trim());
+                    pw.println();
+                }
             }
         }
     }
