@@ -18,7 +18,6 @@ import java.util.concurrent.Future;
  */
 public class HClustAve {
     private int clstId;
-    private int depth = 0;
     private final List<Cluster> firstClusters;
     private final ParsedArgs pargs;
     private final HashMap<Cluster, HashMap<Cluster, Double>> coeffResults = new HashMap(); // HashMap<clst1, HashMap<clst2, coeff>>
@@ -113,10 +112,8 @@ public class HClustAve {
             
             // create new Cluster (left + right)
             this.clstId++;
-            this.depth++;
-            Cluster newClst = new Members(clstId, null, left, right, depth, 1 - maxCoeff);
-            System.out.println("[ Info ] Depth of new cluster: " + depth);
-            System.out.println("Distance: " + (1 - maxCoeff));
+            Cluster newClst = new Members(clstId, null, left, right, 1 - maxCoeff);
+            System.out.println("[ Info ] Cluster merge distance: " + (1 - maxCoeff));
             
             // update coeffResults
             for(Cluster clst1: coeffResults.keySet()) {

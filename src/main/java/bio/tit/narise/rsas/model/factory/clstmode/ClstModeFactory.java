@@ -55,7 +55,7 @@ public class ClstModeFactory {
             for(int j = 0; j < colNumTop; j++) {
                 rowVec[j] = matTop[i][j];
             }
-            Cluster mem = new Member(i, rownamesTop.get(i), null, null, 0, 0, rowVec);
+            Cluster mem = new Member(i, rownamesTop.get(i), null, null, 0, rowVec);
             firstClustersRowTop.add(mem);
         }
         
@@ -67,7 +67,7 @@ public class ClstModeFactory {
             for(int j = 0; j < colNumBottom; j++) {
                 rowVec[j] = matBottom[i][j];
             }
-            Cluster mem = new Member(i, rownamesBottom.get(i), null, null, 0, 0, rowVec);
+            Cluster mem = new Member(i, rownamesBottom.get(i), null, null, 0, rowVec);
             firstClustersRowBottom.add(mem);
         }
 
@@ -78,7 +78,7 @@ public class ClstModeFactory {
             for(int j = 0; j < rowNumTop; j++) {
                 colVec[j] = matTop[j][i];
             }
-            Cluster mem = new Member(i, colnamesTop.get(i), null, null, 0, 0, colVec);
+            Cluster mem = new Member(i, colnamesTop.get(i), null, null, 0, colVec);
             firstClustersColTop.add(mem);
         }
         
@@ -89,7 +89,7 @@ public class ClstModeFactory {
             for(int j = 0; j < rowNumBottom; j++) {
                 colVec[j] = matBottom[j][i];
             }
-            Cluster mem = new Member(i, colnamesBottom.get(i), null, null, 0, 0, colVec);
+            Cluster mem = new Member(i, colnamesBottom.get(i), null, null, 0, colVec);
             firstClustersColBottom.add(mem);
         }
     }

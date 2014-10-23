@@ -14,14 +14,12 @@ public abstract class Cluster {
     protected Cluster right;
     protected int clstNum;
     
-    protected int depth;
     protected double dist;
     
     
-    public Cluster(int id, String name, int depth, double dist){
+    public Cluster(int id, String name, double dist){
         this.id = id;
         this.name = name;
-        this.depth = depth;
         this.dist = dist;
     }
     
@@ -43,10 +41,6 @@ public abstract class Cluster {
     
     public int getMemberNum() {
         return this.clstNum;
-    }
-    
-    public int getDepth() {
-        return this.depth;
     }
     
     public double getDist() {

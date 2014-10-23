@@ -9,8 +9,8 @@ import java.util.List;
  */
 public class Members extends Cluster {
     
-    public Members(int id, String name, Cluster left, Cluster right, int depth, double dist) {
-        super(id, name, depth, dist);
+    public Members(int id, String name, Cluster left, Cluster right, double dist) {
+        super(id, name, dist);
         
         if(left.getId() < right.getId()) {
             super.left = left;
