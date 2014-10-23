@@ -15,7 +15,6 @@ import org.apache.commons.cli.ParseException;
 import bio.tit.narise.rsas.model.factory.product.RSASResults;
 import bio.tit.narise.rsas.controller.mode.Mode;
 import bio.tit.narise.rsas.model.factory.clstmode.product.ClstModeResults;
-import javax.script.ScriptException;
 
 /**
  *
@@ -26,7 +25,7 @@ public class RSAS {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InterruptedException, ExecutionException, ScriptException, NoSuchMethodException {
+    public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, InterruptedException, ExecutionException {
 
         // start time
         long start = System.currentTimeMillis();
@@ -315,14 +314,15 @@ public class RSAS {
             if(pargs.isClstMode()){
                 ClstMode currentMode = new ClstMode(pargs);
                 ClstModeResults res = currentMode.clst();
-                SaveHeatmapUtility.saveHeatmap(res.getHeatmap());
+                SaveHeatmapUtility shutil = new SaveHeatmapUtility();
+                shutil.saveHeatmap(res.getHeatmap());
                 
                 if(pargs.getCutD() < 1 || pargs.getCutK() > 1) {
                     if(res.getSubHeatmapsTop().size() > 0) {
-                        SaveHeatmapUtility.saveSubHeatmaps(res.getSubHeatmapsTop(), pargs.getCns(), "Top");
+                        shutil.saveSubHeatmaps(res.getSubHeatmapsTop(), pargs.getCns(), "Top");
                     }
                     if(res.getSubHeatmapsBottom().size() > 0) {
-                        SaveHeatmapUtility.saveSubHeatmaps(res.getSubHeatmapsBottom(), pargs.getCns(), "Bottom");
+                        shutil.saveSubHeatmaps(res.getSubHeatmapsBottom(), pargs.getCns(), "Bottom");
                     }
                 }
             }

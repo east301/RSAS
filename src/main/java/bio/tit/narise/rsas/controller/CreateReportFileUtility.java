@@ -26,7 +26,7 @@ public class CreateReportFileUtility {
     private static String oreppath = "";
     private static boolean wor = false;
     
-    // this is an utility class
+    // cannot create instance
     private CreateReportFileUtility(){ throw new UnsupportedOperationException(); }
     
     // for test methods

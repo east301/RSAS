@@ -168,23 +168,5 @@ HeatMap.prototype.render = function(resource) {
         //.text(function(d) { return '≥ ' + d; });
 };
 
-// api
-var drawHeatmap = function(filename) {
-
-    var heatmap = new HeatMap();
-    d3.tsv(filename,
-        function(d) {
-            return {
-                row: d.row,
-                col: d.col,
-                has: +d.has
-            };
-        },
-	    function(error, data) {
-			println(data[0].row);
-			heatmap.render(data);
-            return document.getElementById("svg");
-        }
-    );
-};
-
+var heatmap = new HeatMap();
+var drawHeatmap = function(data) { heatmap.render(data); };

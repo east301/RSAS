@@ -9,13 +9,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import com.google.gson.Gson;
 
 /**
  *
@@ -23,10 +21,9 @@ import javax.script.ScriptException;
  */
 public class SaveHeatmapUtility {
 
-    // this is an utility class
-    public SaveHeatmapUtility(){ throw new UnsupportedOperationException(); }
+    public SaveHeatmapUtility(){ }
     
-    static void saveHeatmap(HeatmapMatrix matrix) throws IOException, ScriptException, NoSuchMethodException {
+    public void saveHeatmap(HeatmapMatrix matrix) throws IOException {
         System.out.println("[ Info ] Saving matrix");
         
         String sep = File.separator;
@@ -49,17 +46,20 @@ public class SaveHeatmapUtility {
         saveHeatmapAsTable(ofileTop, matrixTop, rownamesTop, colnamesTop);
         saveHeatmapAsTable(ofileBottom, matrixBottom, rownamesBottom, colnamesBottom);
         
-        File ofileTop2 = new File("clst_mode_results" + sep + "heamapEnrichedAtTopResource.tsv");
-        File ofileBottom2 = new File("clst_mode_results" + sep + "heamapEnrichedAtBottomResource.tsv");
+        //File ofileTop2 = new File("clst_mode_results" + sep + "heamapEnrichedAtTopResource.tsv");
+        //File ofileBottom2 = new File("clst_mode_results" + sep + "heamapEnrichedAtBottomResource.tsv");
         
-        saveHeatmapAsTsv(ofileTop2, matrixTop, rownamesTop, colnamesTop);
-        saveHeatmapAsTsv(ofileBottom2, matrixBottom, rownamesBottom, colnamesBottom);
+        //saveHeatmapAsTsv(ofileTop2, matrixTop, rownamesTop, colnamesTop);
+        //saveHeatmapAsTsv(ofileBottom2, matrixBottom, rownamesBottom, colnamesBottom);
         
-        saveHeatmapAsSvg("clst_mode_results" + sep + "heamapEnrichedAtTop", "clst_mode_results" + sep + "heamapEnrichedAtTopResource.tsv");
-        saveHeatmapAsSvg("clst_mode_results" + sep + "heamapEnrichedAtBottom", "clst_mode_results" + sep + "heamapEnrichedAtBottomResource.tsv");
+        File ofileTop2 = new File("clst_mode_results" + sep + "heamapEnrichedAtTop.html");
+        File ofileBottom2 = new File("clst_mode_results" + sep + "heamapEnrichedAtBottom.html");
+        
+        saveHeatmapAsHtml(ofileTop2, matrixTop, rownamesTop, colnamesTop);
+        saveHeatmapAsHtml(ofileBottom2, matrixBottom, rownamesBottom, colnamesBottom);
     }
     
-    static void saveSubHeatmaps(List<SubHeatmapMatrix> subHeatmaps, int cns, String topOrBottom) throws IOException, ScriptException, NoSuchMethodException {
+    public void saveSubHeatmaps(List<SubHeatmapMatrix> subHeatmaps, int cns, String topOrBottom) throws IOException {
         
         String sep = File.separator;
         File newDir = new File("clst_mode_results");
@@ -99,22 +99,34 @@ public class SaveHeatmapUtility {
             File file = new File(filename1);
             saveHeatmapAsTable(file, subMat.getMatrix(), subMat.getRownames(), subMat.getColnames());
             
-            String filename2 = filenamePrefix
-                    + "_resource"
-                    + ".tsv";
-            File file2 = new File(filename2);
-            saveHeatmapAsTsv(file2, subMat.getMatrix(), subMat.getRownames(), subMat.getColnames());
+            //String filename2 = filenamePrefix
+            //        + "_resource"
+            //        + ".tsv";
+            //File file2 = new File(filename2);
+            //saveHeatmapAsTsv(file2, subMat.getMatrix(), subMat.getRownames(), subMat.getColnames());
             
-            saveHeatmapAsSvg(filenamePrefix, filename1);
+            String filename2 = filenamePrefix
+                    + ".html";
+            File file2 = new File(filename2);
+            saveHeatmapAsHtml(file2, subMat.getMatrix(), subMat.getRownames(), subMat.getColnames());
             
             if(i == cns - 1) {
                 break;
             }
         }
+        
+        // copy draw_heatmap.js
+        try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File("clst_mode_results" + sep + "draw_heatmap.js"))))) {
+            BufferedReader brDh = new BufferedReader(new InputStreamReader(SaveHeatmapUtility.class.getClassLoader().getResourceAsStream("draw_heatmap.js")));
+            String line;
+            while( (line = brDh.readLine()) != null ){
+                pw.println(line);
+            }
+        }
     }
     
     // private method
-    static private void saveHeatmapAsTable (File f, int[][] mat, List<String> rownames, List<String> colnames) throws IOException {
+    private void saveHeatmapAsTable (File f, int[][] mat, List<String> rownames, List<String> colnames) throws IOException {
         
         try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(f)))) {
             
@@ -140,7 +152,7 @@ public class SaveHeatmapUtility {
     }
     
     // private method
-    static private void saveHeatmapAsTsv (File f, int[][] mat, List<String> rownames, List<String> colnames) throws IOException {
+    private void saveHeatmapAsTsv (File f, int[][] mat, List<String> rownames, List<String> colnames) throws IOException {
         
         try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(f)))) {
             
@@ -163,43 +175,43 @@ public class SaveHeatmapUtility {
     }
     
     // private method
-    static private void saveHeatmapAsSvg (String filenamePrefix, String filename) throws IOException, ScriptException, NoSuchMethodException {
+    private void saveHeatmapAsHtml (File f, int[][] mat, List<String> rownames, List<String> colnames) throws IOException {
 
-        ScriptEngineManager scriptEngineMgr = new ScriptEngineManager();
-        ScriptEngine jsEngine = scriptEngineMgr.getEngineByName("JavaScript");
-        
-        BufferedReader brJQ = new BufferedReader(new InputStreamReader(SaveHeatmapUtility.class.getClassLoader().getResourceAsStream("jquery-1.11.1.min.js")));
-        //String line;
-        //while( (line = brJQ.readLine()) != null ){
-        //    System.out.println(line);
-        //}
-        jsEngine.eval(brJQ);
+        Gson gson = new Gson();
+        List<RowHasCol> rhcList = new ArrayList();
+        for (int i = 0; i < rownames.size(); i++) {
+            for (int j = 0; j < colnames.size(); j++) {
 
-        BufferedReader brD3 = new BufferedReader(new InputStreamReader(SaveHeatmapUtility.class.getClassLoader().getResourceAsStream("d3.min.js")));
-        //String line2;
-        //while( (line2 = brD3.readLine()) != null ){
-        //    System.out.println(line2);
-        //}
-        jsEngine.eval(brD3);
-        
-        BufferedReader brDh = new BufferedReader(new InputStreamReader(SaveHeatmapUtility.class.getClassLoader().getResourceAsStream("draw_heatmap.js")));
-        //String line3;
-        //while( (line3 = brDh.readLine()) != null ){
-        //    System.out.println(line3);
-        //}
-        jsEngine.eval(brDh);
-
-        Invocable inv = (Invocable) jsEngine;
-        Object jsResult = inv.invokeFunction("drawHeatmap", filename);
-        
-        File newDir = new File("clst_mode_results");
-        if(!newDir.exists()){
-            newDir.mkdir();
+                RowHasCol rhc = new RowHasCol(rownames.get(i), mat[i][j], colnames.get(j));
+                rhcList.add(rhc);
+            }
         }
         
-        File file = new File(filenamePrefix + ".svg");
-        try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-            pw.write((String) jsResult);
+        try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(f)))) {
+            pw.println("<!DOCTYPE html>");
+            pw.println("<html><head>");
+            pw.println("<script src=\"http://code.jquery.com/jquery-1.11.0.min.js\" charset=\"utf-8\"></script>");
+            pw.println("<script src=\"http://d3js.org/d3.v3.min.js\" charset=\"utf-8\"></script>");
+            pw.println("<script src=\"./draw_heatmap.js\" charset=\"utf-8\"></script>");
+            pw.println("</head><body>");
+            pw.println("<div id=\"chart\"></div>");
+            pw.println("<script>");
+            pw.println("var data =" + gson.toJson(rhcList));
+            pw.println("drawHeatmap(data)");
+            pw.println("</script></body></html>");
+        }
+    }
+    
+    // private class
+    private class RowHasCol {
+        private final String row;
+        private final int has;
+        private final String col;
+        
+        private RowHasCol (String row, int has, String col) {
+            this.row = row;
+            this.has = has;
+            this.col = col;
         }
     }
 }

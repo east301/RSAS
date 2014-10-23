@@ -16,7 +16,7 @@ import bio.tit.narise.rsas.model.factory.product.RSASResults;
  */
 public class CreateXlsFileUtility {
     
-    // this is an utility class
+    // cannot create instance
     private CreateXlsFileUtility(){ throw new UnsupportedOperationException(); }
     
     static void createSaveFile(ParsedArgs pargs) throws IOException {
