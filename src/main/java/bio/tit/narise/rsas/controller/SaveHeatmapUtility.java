@@ -92,8 +92,8 @@ public class SaveHeatmapUtility {
             String filenamePrefix = "clst_mode_results" + sep + "heatmap" + topOrBottom + "_cluster" + (i+1);
             
             String filename1 = filenamePrefix 
-                    + "_col" + rowNum 
-                    + "_row" + colNum 
+                    + "_col" + colNum 
+                    + "_row" + rowNum 
                     + "_score" + subMat.getColoredPixelNum() 
                     + ".tsv";
             File file = new File(filename1);
@@ -110,9 +110,8 @@ public class SaveHeatmapUtility {
             File file2 = new File(filename2);
             saveHeatmapAsHtml(file2, subMat.getMatrix(), subMat.getRownames(), subMat.getColnames());
             
-            if(i == cns - 1) {
-                break;
-            }
+            
+            
         }
         
         // copy draw_heatmap.js
@@ -122,6 +121,32 @@ public class SaveHeatmapUtility {
             while( (line = brDh.readLine()) != null ){
                 pw.println(line);
             }
+        }
+        
+        // create clst_mode_results_index.html
+        try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File("clst_mode_results_index.html"), true)))) {
+
+            pw.println("<ul>[Enriched at " + topOrBottom + "]");
+            for(int i = 0; i < subHeatmaps.size(); i++) {
+                SubHeatmapMatrix subMat = subHeatmaps.get(i);
+                int rowNum = subHeatmaps.get(i).getRownames().size();
+                int colNum = subHeatmaps.get(i).getColnames().size();
+            
+                String linkUrl = "clst_mode_results" + sep + "heatmap" + topOrBottom + "_cluster" + (i+1) + ".html";
+                
+                String linkStr = "cluster" + (i+1)
+                    + " (no. of items: " + rowNum 
+                    + ", no. of item sets: " + colNum 
+                    + ", score: " + subMat.getColoredPixelNum()
+                    + ")";
+                
+                pw.println("<li><a href=" + linkUrl + ">" + linkStr + "</a></li>");
+                
+                if(i == cns - 1) {
+                    break;
+                }
+            }
+            pw.println("</ul>");
         }
     }
     
@@ -151,6 +176,7 @@ public class SaveHeatmapUtility {
         }
     }
     
+    /*
     // private method
     private void saveHeatmapAsTsv (File f, int[][] mat, List<String> rownames, List<String> colnames) throws IOException {
         
@@ -173,6 +199,7 @@ public class SaveHeatmapUtility {
             }
         }
     }
+    */
     
     // private method
     private void saveHeatmapAsHtml (File f, int[][] mat, List<String> rownames, List<String> colnames) throws IOException {

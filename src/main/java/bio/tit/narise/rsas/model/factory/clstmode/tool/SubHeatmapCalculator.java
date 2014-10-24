@@ -18,14 +18,16 @@ public class SubHeatmapCalculator {
     private final int minColNum;
     private final int minRowSum;
     private final int minRowNum;
+    private final int colTotalNum;
     
-    public SubHeatmapCalculator(List<Cluster> ctClustersCol, int[][] matrix, List<String> orderedNameRow, int minColNum, int minRowSum, int minRowNum) {
+    public SubHeatmapCalculator(List<Cluster> ctClustersCol, int[][] matrix, List<String> orderedNameRow, int minColNum, int minRowSum, int minRowNum, int colTotalNum) {
         this.ctClustersCol = ctClustersCol;
         this.matrix = matrix;
         this.orderedNameRow = orderedNameRow;
         this.minColNum = minColNum;
         this.minRowSum = minRowSum;
         this.minRowNum = minRowNum;
+        this.colTotalNum = colTotalNum;
     }
     
     public List<SubHeatmapMatrix> calc() {
@@ -38,6 +40,7 @@ public class SubHeatmapCalculator {
             
             // filt with colNum
             if(memNum < minColNum) {
+                colStart += memNum;
                 continue;
             }
             
@@ -65,6 +68,7 @@ public class SubHeatmapCalculator {
             
             // filt with rowNum
             if(rowNum < minRowNum) {
+                colStart += memNum;
                 continue;
             }
             
@@ -96,7 +100,7 @@ public class SubHeatmapCalculator {
             
             colStart += memNum;
         }
-        
+        if(colStart != colTotalNum){ throw new InternalError("illegal subheatmaps column num"); }
         return ret;
     }
 }

@@ -15,6 +15,10 @@ import org.apache.commons.cli.ParseException;
 import bio.tit.narise.rsas.model.factory.product.RSASResults;
 import bio.tit.narise.rsas.controller.mode.Mode;
 import bio.tit.narise.rsas.model.factory.clstmode.product.ClstModeResults;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 /**
  *
@@ -318,11 +322,21 @@ public class RSAS {
                 shutil.saveHeatmap(res.getHeatmap());
                 
                 if(pargs.getCutD() < 1 || pargs.getCutK() > 1) {
+                    try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File("clst_mode_results_index.html"))))) {
+                        pw.println("<!DOCTYPE html>");
+                        pw.println("<html><head>");
+                        pw.println("</head><body>");
+                    }
+                    
                     if(res.getSubHeatmapsTop().size() > 0) {
                         shutil.saveSubHeatmaps(res.getSubHeatmapsTop(), pargs.getCns(), "Top");
                     }
                     if(res.getSubHeatmapsBottom().size() > 0) {
                         shutil.saveSubHeatmaps(res.getSubHeatmapsBottom(), pargs.getCns(), "Bottom");
+                    }
+                    
+                    try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(new File("clst_mode_results_index.html"), true)))) {
+                        pw.println("</body></html>");
                     }
                 }
             }

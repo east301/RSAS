@@ -167,9 +167,13 @@ public class ClstModeFactory {
         List<String> orderedNameRowTop = topClstRowTop.getOrderedName();
         List<String> orderedNameRowBottom = topClstRowBottom.getOrderedName();
         
+        // for check
+        int colTotalNumTop = this.heatmap.getColnamesTop().size();
+        int colTotalNumBottom = this.heatmap.getColnamesBottom().size();
+        
         System.out.println("[ Info ] Sorting sub matrix");
-        SubHeatmapCalculator smcTop = new SubHeatmapCalculator(ctClustersColTop, matrixTop, orderedNameRowTop, minColNum, minRowSum, minRowNum);
-        SubHeatmapCalculator smcBottom = new SubHeatmapCalculator(ctClustersColBottom, matrixBottom, orderedNameRowBottom, minColNum, minRowSum, minRowNum);
+        SubHeatmapCalculator smcTop = new SubHeatmapCalculator(ctClustersColTop, matrixTop, orderedNameRowTop, minColNum, minRowSum, minRowNum, colTotalNumTop);
+        SubHeatmapCalculator smcBottom = new SubHeatmapCalculator(ctClustersColBottom, matrixBottom, orderedNameRowBottom, minColNum, minRowSum, minRowNum, colTotalNumBottom);
         
         subHeatmapsTop = smcTop.calc();
         subHeatmapsBottom = smcBottom.calc();
