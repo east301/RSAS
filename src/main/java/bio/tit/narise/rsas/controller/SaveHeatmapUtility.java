@@ -109,9 +109,6 @@ public class SaveHeatmapUtility {
                     + ".html";
             File file2 = new File(filename2);
             saveHeatmapAsHtml(file2, subMat.getMatrix(), subMat.getRownames(), subMat.getColnames());
-            
-            
-            
         }
         
         // copy draw_heatmap.js
@@ -135,8 +132,8 @@ public class SaveHeatmapUtility {
                 String linkUrl = "clst_mode_results" + sep + "heatmap" + topOrBottom + "_cluster" + (i+1) + ".html";
                 
                 String linkStr = "cluster" + (i+1)
-                    + " (no. of items: " + rowNum 
-                    + ", no. of item sets: " + colNum 
+                    + " (no. of items: " + colNum 
+                    + ", no. of item sets: " + rowNum 
                     + ", score: " + subMat.getColoredPixelNum()
                     + ")";
                 
