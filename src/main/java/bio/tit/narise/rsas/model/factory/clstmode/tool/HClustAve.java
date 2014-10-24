@@ -159,7 +159,7 @@ public class HClustAve {
             coeffResults.put(newClst, emptyMap);
         }
         
-        System.out.println("TopCluster: " + ret.getId());
+        //System.out.println("TopCluster: " + ret.getId());
         return ret;
     }
 }

@@ -73,7 +73,18 @@ class GSEAModeFileParserUtility {
         }
         else if( sVals.size() > 1 ) { // id and statistic
             if( !onlyRnkIds1.isEmpty() ){ System.out.println( "Items without a value will be ignored: " + onlyRnkIds1);}
-            if( ids2.size() < ids1.size() ){ throw new IllegalArgumentException("Error in reading rnk file: redundant ID"); }
+            if( ids2.size() < ids1.size() ){ 
+                for(String id2: ids2) {
+                    int count = 0;
+                    for(String id1: ids1) {
+                        if(id2.equals(id1)) { count++; }
+                    }
+                    if(count > 1) {
+                        System.out.print("redundant ID: ");
+                        System.out.print(id2 + " ");
+                    }
+                }
+                throw new IllegalArgumentException("Error in reading rnk file: redundant ID"); }
             for(int i = 0; i < ids1.size(); i++) {
                 itemRnkBeforeSort.put(ids1.get(i), sVals.get(i));
             }
@@ -96,7 +107,18 @@ class GSEAModeFileParserUtility {
             return itemRnk;
         }
         else { // only rnk
-            if( onlyRnkIds2.size() < onlyRnkIds1.size() ){ throw new IllegalArgumentException("Error in reading rnk file: redundant ID"); }
+            if( onlyRnkIds2.size() < onlyRnkIds1.size() ){ 
+                for(String id2: onlyRnkIds2) {
+                    int count = 0;
+                    for(String id1: onlyRnkIds1) {
+                        if(id2.equals(id1)) { count++; }
+                    }
+                    if(count == 2) {
+                        System.out.print("redundant ID: ");
+                        System.out.print(id2 + " ");
+                    }
+                }
+                throw new IllegalArgumentException("Error in reading rnk file: redundant ID"); }
             if( onlyRnkIds1.size() == 1 ){ throw new IllegalArgumentException("Error in reading rnk file: item number must be more than one"); }
             // Report
             CreateReportFileUtility.reportItemRnkParse(onlyRnkIds1);
@@ -140,7 +162,21 @@ class GSEAModeFileParserUtility {
         }
         
         if( ids1.isEmpty() ){ throw new IllegalArgumentException("Error in reading rnkp file: rnkp file data is empty"); }
-        if( ids2.size() < ids1.size()){  throw new IllegalArgumentException("Error in reading rnkp file: redundant ID"); }
+        if (ids2.size() < ids1.size()) {
+            for (String id2 : ids2) {
+                int count = 0;
+                for (String id1 : ids1) {
+                    if (id2.equals(id1)) {
+                        count++;
+                    }
+                }
+                System.out.print("redundant ID: ");
+                if (count == 2) {
+                    System.out.print(id2 + " ");
+                }
+            }
+            throw new IllegalArgumentException("Error in reading rnkp file: redundant ID");
+        }
         if( !onlyRnkIds.isEmpty() ){ System.out.println( "Items without a value will be ignored: " + onlyRnkIds);}
         
         for(int i = 0; i < ids1.size(); i++) {
