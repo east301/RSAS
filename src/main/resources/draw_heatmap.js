@@ -113,11 +113,11 @@ HeatMap.prototype.render = function(resource) {
     this._colLabels = this._svg.selectAll('.colLabel')
         .data(this._cols)
         .enter()
-        .append('svg:a')
-        .attr('xlink:href', function(d){ 
-            var ret = 'http://coxpresdb.jp/data/gene/' + d + '.shtml';
-            return ret; 
-        })
+        //.append('svg:a')
+        //.attr('xlink:href', function(d){ 
+        //    var ret = 'http://coxpresdb.jp/data/gene/' + d + '.shtml';
+        //    return ret; 
+        //})
         .append('text')
         .text(function (d) { return d; })
         .attr('x', function (d, i) { return i * gridSize + margin.left + gridSize/1.5; })
