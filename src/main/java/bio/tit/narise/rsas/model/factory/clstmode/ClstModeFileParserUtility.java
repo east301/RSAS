@@ -20,7 +20,7 @@ public class ClstModeFileParserUtility {
     // this is an utility class
     private ClstModeFileParserUtility(){ throw new UnsupportedOperationException(); }
     
-    public static HeatmapMatrix parseXlsFile(String xlspath, int mcn) throws FileNotFoundException, IOException {
+    public static HeatmapMatrix parseXlsFile(String xlspath) throws FileNotFoundException, IOException {
         File xlsfile = new File(xlspath);
         System.out.println("[ Info ] Reading xls file");
         
@@ -52,7 +52,7 @@ public class ClstModeFileParserUtility {
                     //System.out.println(lineList[9]);
                     if(contris[0].equals("Contributors")){ continue; }
                     if(contris[0].isEmpty()){ continue; }
-                    if(contris.length >= mcn) {
+                    if(contris.length >= 1) { // minimum number of contributors in an item set (for the clustering)
                         if(!bottomFlag) {
                             rownamesTop.add(lineList[0]);
                             itemSetsTop.add(contris);

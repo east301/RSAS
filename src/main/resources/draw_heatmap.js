@@ -30,7 +30,7 @@ var whichIs = function(arr, str) {
 
 // main
 var HeatMap = function() {
-    this._margin = { top: 80, right: 1000, bottom: 100, left: 50 };
+    this._margin = { top: 120, right: 1000, bottom: 100, left: 50 };
     this._gridSize = 35;
     this._legendElementWidth = 55;
     

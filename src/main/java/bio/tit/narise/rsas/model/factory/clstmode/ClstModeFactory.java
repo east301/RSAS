@@ -41,7 +41,7 @@ public class ClstModeFactory {
     }
     
     public void parseXlsFile() throws IOException {
-        HeatmapMatrix beforeClustering = ClstModeFileParserUtility.parseXlsFile(pargs.getXlspath(), pargs.getMinConNum());
+        HeatmapMatrix beforeClustering = ClstModeFileParserUtility.parseXlsFile(pargs.getXlspath());
         this.heatmap = beforeClustering;
     }
     
@@ -158,8 +158,8 @@ public class ClstModeFactory {
     
     public void getSubHeatmaps() {
         
-        int minColNum = 2;
-        int minRowSum = 2;
+        int minColNum = pargs.getClstMinContri();
+        int minRowSum = pargs.getSetMinContri();
         int minRowNum = 1;
         
         int[][] matrixTop = heatmap.getMatrixTop();

@@ -103,11 +103,16 @@ public class RSAS {
                                 .hasArg(true)
                                 .create("mi") );
         
-        options.addOption( OptionBuilder.withLongOpt( "min_con_num" )
+        options.addOption( OptionBuilder.withLongOpt( "set_min_contri" )
                                 .withArgName("number")
-                                .withDescription( "item sets with less than the specified number of contributors are removed from the clustering" )
+                                .withDescription( "item sets with less than the specified number of contributors are removed from the heatmap" )
                                 .hasArg(true)
-                                .create("mcn") );
+                                .create("smc") );
+        options.addOption( OptionBuilder.withLongOpt( "clst_min_contri" )
+                                .withArgName("number")
+                                .withDescription( "clusters with less than the specified number of contributors are removed from the heatmap" )
+                                .hasArg(true)
+                                .create("cmc") );
         options.addOption( OptionBuilder.withLongOpt( "cut_dist" )
                                 .withArgName("distance")
                                 .withDescription( "cut a tree from hierarchical clustering of items at the specified distance (in the range 0 to 1)" )
@@ -145,8 +150,8 @@ public class RSAS {
         
         options.addOption( "les", "leading-edge_subset", false, "apply filtering to leading-edge subsets" );
         
-        options.addOption( "jc", "jaccard_coefficient", false, "use jaccard coefficient for the clustering" );
-        options.addOption( "oc", "overlap_coefficient", false, "use overlap coefficient for the clustering" );
+        options.addOption( "jc", "jaccard_coeff", false, "use jaccard coefficient for the clustering" );
+        options.addOption( "oc", "overlap_coeff", false, "use overlap coefficient for the clustering" );
         
         options.addOption( "wor", "without_report", false, "do not create rep file" );
         
@@ -213,9 +218,14 @@ public class RSAS {
                 pargs.setMin( Integer.parseInt(line.getOptionValue( "mi" )) );
             }
             
-            // for mcn
-            if( line.hasOption( "mcn" ) | line.hasOption( "min_con_num" ) ) {
-                pargs.setMinConNum( Integer.parseInt(line.getOptionValue( "mcn" )) );
+            // for smc
+            if( line.hasOption( "smc" ) | line.hasOption( "set_min_contri" ) ) {
+                pargs.setSetMinContri( Integer.parseInt(line.getOptionValue( "smc" )) );
+            }
+            
+            // for cmc
+            if( line.hasOption( "cmc" ) | line.hasOption( "clst_min_contri" ) ) {
+                pargs.setClstMinContri( Integer.parseInt(line.getOptionValue( "cmc" )) );
             }
             
             // for cutD
@@ -284,11 +294,11 @@ public class RSAS {
             }
             
             // for jc
-            if( line.hasOption( "jc" ) | line.hasOption( "jaccard_coefficient" ) ) {
+            if( line.hasOption( "jc" ) | line.hasOption( "jaccard_coeff" ) ) {
                 pargs.setJc(true);
             }
             // for oc
-            if( line.hasOption( "oc" ) | line.hasOption( "overlap_coefficient" ) ) {
+            if( line.hasOption( "oc" ) | line.hasOption( "overlap_coeff" ) ) {
                 pargs.setOc(true);
             }
             

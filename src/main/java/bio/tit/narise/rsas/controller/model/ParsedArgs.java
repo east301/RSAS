@@ -30,7 +30,8 @@ public class ParsedArgs {
     private Integer max = null;
     private Integer min = null;
     
-    private Integer mcn = null;
+    private Integer smc = null;
+    private Integer cmc = null;
     private Double cutD = null;
     private Integer cutK = null;
     private Integer cns = null;
@@ -219,18 +220,34 @@ public class ParsedArgs {
     
     /**
      * 
-     * @return the mcn
+     * @return the smc
      */
-    public int getMinConNum() {
-        return mcn;
+    public int getSetMinContri() {
+        return smc;
     }
     
     /**
      * 
-     * @param mcn the mcn to set
+     * @param smc the smc to set
      */
-    public void setMinConNum(int mcn) {
-        this.mcn = mcn;
+    public void setSetMinContri(int smc) {
+        this.smc = smc;
+    }
+    
+    /**
+     * 
+     * @return the cmc
+     */
+    public int getClstMinContri() {
+        return cmc;
+    }
+    
+    /**
+     * 
+     * @param cmc the cmc to set
+     */
+    public void setClstMinContri(int cmc) {
+        this.cmc = cmc;
     }
     
     /**
@@ -506,13 +523,15 @@ public class ParsedArgs {
         
         if(max != null && max < 0){ throw new IllegalArgumentException("Illegal maximum size of items in a set"); }
 	if(min != null && min < 0){ throw new IllegalArgumentException("Illegal minimum size of items in a set"); }
-        if(mcn != null && mcn < 0){ throw new IllegalArgumentException("Illegal minimum contributors number"); }
+        if(smc != null && smc < 0){ throw new IllegalArgumentException("Illegal minimum contributors number of sets"); }
+        if(cmc != null && cmc < 0){ throw new IllegalArgumentException("Illegal minimum contributors number of clusters"); }
         if(cutK != null && cutK < 1){ throw new IllegalArgumentException("Illegal number of clusters to cut into"); }
         if(cns != null && cns < 0){ throw new IllegalArgumentException("Illegal number of clusters to save"); }
         
         if(min == null){ min = 0; }
         if(max == null){ max = -1; }
-        if(mcn == null){ mcn = 1; }
+        if(smc == null){ smc = 2; }
+        if(cmc == null){ cmc = 2; }
         if(cutK == null){ cutK = -1; }
         if(cns == null){ cns = 15; }
         
