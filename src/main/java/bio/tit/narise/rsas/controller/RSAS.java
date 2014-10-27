@@ -94,12 +94,12 @@ public class RSAS {
         
         options.addOption( OptionBuilder.withLongOpt( "max" )
                                 .withArgName("number")
-                                .withDescription( "specify the maximum number of items in a set" )
+                                .withDescription( "specify the maximum number of items in an item set" )
                                 .hasArg(true)
                                 .create("ma") );
         options.addOption( OptionBuilder.withLongOpt( "min" )
                                 .withArgName("number")
-                                .withDescription( "specify the minimum number of items in a set" )
+                                .withDescription( "specify the minimum number of items in an item set" )
                                 .hasArg(true)
                                 .create("mi") );
         
@@ -125,7 +125,7 @@ public class RSAS {
                                 .create("cutK") );
         options.addOption( OptionBuilder.withLongOpt( "clst_num_to_save" )
                                 .withArgName("number")
-                                .withDescription( "specify the number of clusters to save" )
+                                .withDescription( "specify the maximum number of clusters to save" )
                                 .hasArg(true)
                                 .create("cns") );
         

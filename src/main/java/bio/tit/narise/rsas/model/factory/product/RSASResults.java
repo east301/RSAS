@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class RSASResults extends Result {
 
-    private List<RSASRes> resultsPos;
-    private List<RSASRes> resultsNeg;
+    private final List<RSASRes> resultsPos;
+    private final List<RSASRes> resultsNeg;
     private int setNumPos;
     private int setNumNeg;
     

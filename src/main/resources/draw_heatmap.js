@@ -53,7 +53,7 @@ var HeatMap = function() {
 HeatMap.prototype.render = function(resource) {
     var self = this;
 	
-	var margin = this._margin;
+    var margin = this._margin;
     var gridSize = this._gridSize;
     var legendElementWidth = this._legendElementWidth;
     var colors = this._colors;
@@ -71,7 +71,7 @@ HeatMap.prototype.render = function(resource) {
     //console.log(this._rows);
     //console.log(this._cols);
     
-	this._width = this._cols.length * gridSize + margin.left + margin.right;
+    this._width = this._cols.length * gridSize + margin.left + margin.right;
     this._height = this._rows.length * gridSize + margin.top + margin.bottom;
 
     this._svg = d3.select('#chart').append('svg')

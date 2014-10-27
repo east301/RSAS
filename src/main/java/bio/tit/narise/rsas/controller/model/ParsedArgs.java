@@ -521,15 +521,15 @@ public class ParsedArgs {
     
     private void checkIntOptions() {
         
-        if(max != null && max < 0){ throw new IllegalArgumentException("Illegal maximum size of items in a set"); }
-	if(min != null && min < 0){ throw new IllegalArgumentException("Illegal minimum size of items in a set"); }
-        if(smc != null && smc < 0){ throw new IllegalArgumentException("Illegal minimum contributors number of sets"); }
-        if(cmc != null && cmc < 0){ throw new IllegalArgumentException("Illegal minimum contributors number of clusters"); }
-        if(cutK != null && cutK < 1){ throw new IllegalArgumentException("Illegal number of clusters to cut into"); }
-        if(cns != null && cns < 0){ throw new IllegalArgumentException("Illegal number of clusters to save"); }
+        if(max != null && max < 0){ throw new IllegalArgumentException("Illegal maximum number of items in an item set"); }
+	if(min != null && min < 0){ throw new IllegalArgumentException("Illegal minimum number of items in an item set"); }
+        if(smc != null && smc < 0){ throw new IllegalArgumentException("Illegal minimum number of contributors in an item set"); }
+        if(cmc != null && cmc < 0){ throw new IllegalArgumentException("Illegal minimum number of contributors in a cluster"); }
+        if(cutK != null && cutK < 1){ throw new IllegalArgumentException("Illegal cluster number to cut into"); }
+        if(cns != null && cns < 0){ throw new IllegalArgumentException("Illegal maximum number of clusters to save"); }
         
-        if(min == null){ min = 0; }
-        if(max == null){ max = -1; }
+        if(min == null){ min = 15; }
+        if(max == null){ max = 500; }
         if(smc == null){ smc = 2; }
         if(cmc == null){ cmc = 2; }
         if(cutK == null){ cutK = -1; }
