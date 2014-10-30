@@ -110,7 +110,7 @@ public class RSAS {
                                 .create("smc") );
         options.addOption( OptionBuilder.withLongOpt( "clst_min_contri" )
                                 .withArgName("number")
-                                .withDescription( "clusters with less than the specified number of contributors are removed from the heatmap" )
+                                .withDescription( "clusters with less than the specified number of contributors are not saved" )
                                 .hasArg(true)
                                 .create("cmc") );
         options.addOption( OptionBuilder.withLongOpt( "cut_dist" )
@@ -152,6 +152,12 @@ public class RSAS {
         
         options.addOption( "jc", "jaccard_coeff", false, "use jaccard coefficient for the clustering" );
         options.addOption( "oc", "overlap_coeff", false, "use overlap coefficient for the clustering" );
+        
+        options.addOption( OptionBuilder.withLongOpt( "jaccard_coeff_rate" )
+                                .withArgName("rate")
+                                .withDescription( "specify the rate of jaccard coefficient" )
+                                .hasArg(true)
+                                .create("jcr") );
         
         options.addOption( "wor", "without_report", false, "do not create rep file" );
         
@@ -300,6 +306,11 @@ public class RSAS {
             // for oc
             if( line.hasOption( "oc" ) | line.hasOption( "overlap_coeff" ) ) {
                 pargs.setOc(true);
+            }
+            
+            // for jcr
+            if( line.hasOption( "jcr" ) | line.hasOption( "jaccard_coeff_rate" ) ) {
+                pargs.setJcr( Double.parseDouble(line.getOptionValue( "jcr" )) );
             }
             
             // for without report

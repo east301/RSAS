@@ -56,6 +56,8 @@ public class ParsedArgs {
     private boolean jc = false;
     private boolean oc = false;
     
+    private Double jcr = null;
+    
     private boolean wor = false;
     
     /**
@@ -487,6 +489,22 @@ public class ParsedArgs {
     }
     
     /**
+     * 
+     * @return the jcr
+     */
+    public double getJcr() {
+        return jcr;
+    }
+    
+    /**
+     * 
+     * @param jcr the jcr to set
+     */
+    public void setJcr(double jcr) {
+        this.jcr = jcr;
+    }
+    
+    /**
      * @return the wor
      */
     public boolean isWor() {
@@ -552,8 +570,11 @@ public class ParsedArgs {
         if(fdr == null){ fdr = -1.0; }
         if(fcr == null){ fcr = -1.0; }
         
-        if((cutD != null && cutD < 0) ||(cutD != null && cutD > 1)){ throw new IllegalArgumentException("Illegal cut distance"); }
+        if((cutD != null && cutD < 0) || (cutD != null && cutD > 1)){ throw new IllegalArgumentException("Illegal cut distance"); }
         if(cutD == null) { cutD = 1.1; }
+        
+        if((jcr != null && jcr < 0) || (jcr != null && jcr > 1)){ throw new IllegalArgumentException("Illegal jaccard coefficient rate"); }
+        if(jcr == null) { jcr = 0.5; }
     }
     
     private void checkOutputFile(File file) {
@@ -654,9 +675,17 @@ public class ParsedArgs {
         
         if(clstMode) {
             if(jc && oc) { throw new IllegalArgumentException("both -jc and -oc options are selected"); }
-            else if (!jc && !oc) {
+            else if (jc) {
                 System.out.println("Use jaccard coefficient for the clustering");
-                setJc(true); // default is jaccard coefficient
+            }
+            else if (oc) {
+                System.out.println("Use overlap coefficient for the clustering");
+            }
+            else if (jcr == 0.5){
+                System.out.println("Use jaccard coefficient and overlap coefficient for the clustering (jaccard coefficient rate = 0.5)");
+                // default jcr = 0.5
+            } else {
+                System.out.println("Use jaccard coefficient and overlap coefficient for the clustering (jaccard coefficient rate = " + this.jcr + ")");
             }
             
             if(cutD < 1 && cutK > 1) { throw new IllegalArgumentException("both -cutD and -cutK options are selected"); }

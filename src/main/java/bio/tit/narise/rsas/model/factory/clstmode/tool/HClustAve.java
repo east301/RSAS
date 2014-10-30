@@ -43,7 +43,7 @@ public class HClustAve {
                 final Cluster clst2 = firstClusters.get(j);
                 clst2List.add(clst2);
             }
-            final CoeffCalculator coeffCalculator = new CoeffCalculator(clst1, clst2List, pargs.isJc());
+            final CoeffCalculator coeffCalculator = new CoeffCalculator(clst1, clst2List, pargs.isJc(), pargs.isOc(), pargs.getJcr());
             processesCalcCoeff.add(coeffCalculator);
         }
         List<Future<HashMap<Cluster, HashMap<Cluster, Double>>>> coeffResultFutures = new LinkedList();
